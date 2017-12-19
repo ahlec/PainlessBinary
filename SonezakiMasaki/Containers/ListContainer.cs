@@ -15,13 +15,20 @@ namespace SonezakiMasaki.Containers
         int _listLength;
         IList _list;
 
-        public ContainerId Id => ContainerId.List;
+        public override ContainerId Id => ContainerId.List;
 
-        public object FinalValue => _list;
+        protected override object FinalValue => _list;
 
-        public void ReadHeader( BinaryReader reader )
+        /// <inheritdoc />
+        protected override IEnumerable<ISerializableValue> ReadContainedValues( BinaryReader reader, ObjectSerializer objectSerializer )
         {
             _listLength = reader.ReadInt32();
+            ITypeDefinition typeDefinition = objectSerializer.ReadNextTypeDefinition( reader );
+
+            for ( int index = 0; index < _listLength; ++index )
+            {
+                yield return typeDefinition.CreateValue();
+            }
         }
 
         public void Prepare( ISerializableValue typeInfo )
@@ -30,7 +37,7 @@ namespace SonezakiMasaki.Containers
             _list = (IList) Activator.CreateInstance( listType, _listLength );
         }
 
-        public void AddItem( object item )
+        protected override void AddItem( object item )
         {
             if ( _list.Count >= _listLength )
             {

@@ -3,17 +3,15 @@
 // This library is available to the public under the MIT license.
 // ------------------------------------------------------------------------------------------------------------------------
 
-using System.IO;
+using System;
+using System.Collections.Generic;
 
 namespace SonezakiMasaki
 {
-    internal interface ISerializableValue
+    internal interface ITypeDefinition
     {
-        /// <summary>
-        /// The type itself.
-        /// </summary>
-        ITypeDefinition Type { get; }
+        Type Type { get; }
 
-        object Read( BinaryReader reader );
+        IEnumerable<ISerializableValue> CreateValue();
     }
 }

@@ -26,23 +26,22 @@ namespace SonezakiMasaki
             Container = 1
         }
 
-        public ISerializableValue ReadNextTypeInfo( BinaryReader reader )
+        public ITypeDefinition ReadNextTypeDefinition( BinaryReader reader )
         {
             TypeCategory category = (TypeCategory) reader.ReadByte();
             int typeId = reader.ReadInt32();
-            ISerializableValue typeInfo = ResolveTypeInfo( category, typeId );
-            typeInfo.ReadHeader( reader, this );
+            ITypeDefinition typeInfo = ResolveTypeInfo( category, typeId, reader );
             return typeInfo;
         }
 
-        ISerializableValue ResolveTypeInfo( TypeCategory category, int typeId )
+        ITypeDefinition ResolveTypeInfo( TypeCategory category, int typeId, BinaryReader reader )
         {
             switch ( category )
             {
                 case TypeCategory.RegularType:
                     return _typeResolver.ResolveType( typeId );
                 case TypeCategory.Container:
-                    return _containerResolver.ResolveContainer( typeId );
+                    return _containerResolver.ResolveContainer( typeId, reader, this );
                 default:
                     throw new NotSupportedException();
             }

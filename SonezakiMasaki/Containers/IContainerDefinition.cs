@@ -3,17 +3,9 @@
 // This library is available to the public under the MIT license.
 // ------------------------------------------------------------------------------------------------------------------------
 
-using System.IO;
-
-namespace SonezakiMasaki
+namespace SonezakiMasaki.Containers
 {
-    internal interface ISerializableValue
+    internal interface IContainerDefinition : ITypeDefinition
     {
-        /// <summary>
-        /// The type itself.
-        /// </summary>
-        ITypeDefinition Type { get; }
-
-        object Read( BinaryReader reader );
     }
 }
