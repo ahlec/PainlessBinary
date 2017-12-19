@@ -9,11 +9,11 @@ namespace SonezakiMasaki
 {
     internal sealed class TypeResolver
     {
-        public ITypeInfo GetTypeInfoFromType( Type type )
+        public ISerializableValue GetTypeInfoFromType( Type type )
         {
         }
 
-        public ITypeInfo ResolveType( int typeId )
+        public ISerializableValue ResolveType( int typeId )
         {
         }
     }

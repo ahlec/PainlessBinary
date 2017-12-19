@@ -45,10 +45,16 @@
     <AdditionalFiles Include="../stylecop.json">
       <Link>stylecop.json</Link>
     </AdditionalFiles>
+    <Compile Include="BinaryFileReader.cs" />
+    <Compile Include="Containers\ContainerId.cs" />
+    <Compile Include="Containers\ContainerResolver.cs" />
     <Compile Include="Containers\ListContainer.cs" />
     <Compile Include="Containers\NoneContainer.cs" />
-    <Compile Include="IContainer.cs" />
-    <Compile Include="ITypeInfo.cs" />
+    <Compile Include="Containers\Container.cs" />
+    <Compile Include="Exceptions\SonezakiMasakiException.cs" />
+    <Compile Include="Exceptions\UnrecognizedContainerException.cs" />
+    <Compile Include="ISerializableValue.cs" />
+    <Compile Include="ObjectSerializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SerializedFieldAttribute.cs" />
     <Compile Include="Serializer.cs" />

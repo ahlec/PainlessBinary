@@ -5,9 +5,10 @@
 
 namespace SonezakiMasaki.Containers
 {
-    internal enum ContainerId : byte
+    internal enum ContainerId
     {
         None = 0,
-        List = 1
+        Array = 1,
+        List = 2
     }
 }

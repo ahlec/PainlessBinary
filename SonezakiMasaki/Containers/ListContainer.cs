@@ -10,7 +10,7 @@ using System.IO;
 
 namespace SonezakiMasaki.Containers
 {
-    internal sealed class ListContainer : IContainer
+    internal sealed class ListContainer : Container
     {
         int _listLength;
         IList _list;
@@ -24,7 +24,7 @@ namespace SonezakiMasaki.Containers
             _listLength = reader.ReadInt32();
         }
 
-        public void Prepare( ITypeInfo typeInfo )
+        public void Prepare( ISerializableValue typeInfo )
         {
             Type listType = typeof( List<> ).MakeGenericType( typeInfo.Type );
             _list = (IList) Activator.CreateInstance( listType, _listLength );

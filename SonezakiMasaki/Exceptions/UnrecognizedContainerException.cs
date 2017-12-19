@@ -7,12 +7,12 @@ namespace SonezakiMasaki.Exceptions
 {
     public sealed class UnrecognizedContainerException : SonezakiMasakiException
     {
-        internal UnrecognizedContainerException( byte containerId )
+        internal UnrecognizedContainerException( int containerId )
             : base( $"There is no container with the encountered ID of {containerId}." )
         {
             ContainerId = containerId;
         }
 
-        public byte ContainerId { get; }
+        public int ContainerId { get; }
     }
 }

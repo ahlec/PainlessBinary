@@ -3,27 +3,39 @@
 // This library is available to the public under the MIT license.
 // ------------------------------------------------------------------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace SonezakiMasaki.Containers
 {
-    internal sealed class NoneContainer : IContainer
+    internal sealed class NoneContainer : Container
     {
-        public ContainerId Id => ContainerId.None;
+        object _value;
 
-        public object FinalValue { get; private set; }
+        public override ContainerId Id => ContainerId.None;
 
-        public void ReadHeader( BinaryReader reader )
+        protected override object FinalValue => _value;
+
+        /// <inheritdoc />
+        protected override IEnumerable<ISerializableValue> ReadContainedValues( BinaryReader reader, ObjectSerializer objectSerializer )
         {
+            throw new NotImplementedException();
         }
 
-        public void Prepare( ITypeInfo typeInfo )
+        /// <inheritdoc />
+        protected override void AddItem( object item )
         {
+            if ( _value != null )
+            {
+                throw new InvalidOperationException( "A value has already been deserialized." );
+            }
+
+            _value = item;
         }
 
-        public void AddItem( object item )
+        public void Prepare( ISerializableValue typeInfo )
         {
-            FinalValue = item;
         }
     }
 }

@@ -17,22 +17,22 @@ namespace SonezakiMasaki
         {
             using ( BinaryReader reader = new BinaryReader( dataStream ) )
             {
-                ITypeInfo typeInfo = _typeResolver.GetTypeInfoFromType( typeof( T ) );
+                ISerializableValue typeInfo = _typeResolver.GetTypeInfoFromType( typeof( T ) );
                 return (T) DeserializeItem( reader, new NoneContainer(), typeInfo );
             }
         }
 
         object DeserializeObject( BinaryReader reader )
         {
-            ReadObjectHeader( reader, out IContainer container, out ITypeInfo typeInfo );
+            ReadObjectHeader( reader, out Container container, out ISerializableValue typeInfo );
             return DeserializeItem( reader, container, typeInfo );
         }
 
-        object DeserializeItem( BinaryReader reader, IContainer container, ITypeInfo type )
+        object DeserializeItem( BinaryReader reader, Container container, ISerializableValue type )
         {
         }
 
-        void ReadObjectHeader( BinaryReader reader, out IContainer container, out ITypeInfo typeInfo )
+        void ReadObjectHeader( BinaryReader reader, out Container container, out ISerializableValue typeInfo )
         {
             byte containerId = reader.ReadByte();
             container = _containerResolver.ResolveContainer( containerId );

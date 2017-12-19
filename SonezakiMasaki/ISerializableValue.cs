@@ -4,14 +4,19 @@
 // ------------------------------------------------------------------------------------------------------------------------
 
 using System;
+using System.IO;
 
 namespace SonezakiMasaki
 {
-    internal interface ITypeInfo
+    internal interface ISerializableValue
     {
         /// <summary>
         /// The type itself.
         /// </summary>
         Type Type { get; }
+
+        void ReadHeader( BinaryReader reader, ObjectSerializer objectSerializer );
+
+        object Read( BinaryReader reader );
     }
 }

@@ -16,16 +16,16 @@ namespace SonezakiMasaki.Containers
             { ContainerId.List, () => new ListContainer() }
         };
 
-        delegate IContainer ContainerConstructor();
+        delegate Container ContainerConstructor();
 
-        public IContainer ResolveContainer( byte containerId )
+        public Container ResolveContainer( int containerId )
         {
             if ( !_containers.TryGetValue( (ContainerId) containerId, out ContainerConstructor constructor ) )
             {
                 throw new UnrecognizedContainerException( containerId );
             }
 
-            IContainer container = constructor();
+            Container container = constructor();
             return container;
         }
     }
