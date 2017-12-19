@@ -5,15 +5,17 @@
 
 using System;
 
-namespace SonezakiMasaki
+namespace SonezakiMasaki.Exceptions
 {
-    internal sealed class TypeResolver
+    public abstract class SonezakiMasakiException : Exception
     {
-        public ITypeInfo GetTypeInfoFromType( Type type )
+        internal SonezakiMasakiException( string message )
+            : base( message )
         {
         }
 
-        public ITypeInfo ResolveType( int typeId )
+        internal SonezakiMasakiException( string message, Exception innerException )
+            : base( message, innerException )
         {
         }
     }

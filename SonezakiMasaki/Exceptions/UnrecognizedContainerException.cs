@@ -3,18 +3,16 @@
 // This library is available to the public under the MIT license.
 // ------------------------------------------------------------------------------------------------------------------------
 
-using System;
-
-namespace SonezakiMasaki
+namespace SonezakiMasaki.Exceptions
 {
-    internal sealed class TypeResolver
+    public sealed class UnrecognizedContainerException : SonezakiMasakiException
     {
-        public ITypeInfo GetTypeInfoFromType( Type type )
+        internal UnrecognizedContainerException( byte containerId )
+            : base( $"There is no container with the encountered ID of {containerId}." )
         {
+            ContainerId = containerId;
         }
 
-        public ITypeInfo ResolveType( int typeId )
-        {
-        }
+        public byte ContainerId { get; }
     }
 }

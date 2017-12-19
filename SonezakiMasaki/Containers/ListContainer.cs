@@ -15,6 +15,8 @@ namespace SonezakiMasaki.Containers
         int _listLength;
         IList _list;
 
+        public ContainerId Id => ContainerId.List;
+
         public object FinalValue => _list;
 
         public void ReadHeader( BinaryReader reader )

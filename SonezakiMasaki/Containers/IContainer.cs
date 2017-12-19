@@ -5,10 +5,12 @@
 
 using System.IO;
 
-namespace SonezakiMasaki
+namespace SonezakiMasaki.Containers
 {
     internal interface IContainer
     {
+        ContainerId Id { get; }
+
         object FinalValue { get; }
 
         /// <summary>

@@ -3,18 +3,11 @@
 // This library is available to the public under the MIT license.
 // ------------------------------------------------------------------------------------------------------------------------
 
-using System;
-
-namespace SonezakiMasaki
+namespace SonezakiMasaki.Containers
 {
-    internal sealed class TypeResolver
+    internal enum ContainerId : byte
     {
-        public ITypeInfo GetTypeInfoFromType( Type type )
-        {
-        }
-
-        public ITypeInfo ResolveType( int typeId )
-        {
-        }
+        None = 0,
+        List = 1
     }
 }

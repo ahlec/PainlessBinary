@@ -9,6 +9,8 @@ namespace SonezakiMasaki.Containers
 {
     internal sealed class NoneContainer : IContainer
     {
+        public ContainerId Id => ContainerId.None;
+
         public object FinalValue { get; private set; }
 
         public void ReadHeader( BinaryReader reader )
