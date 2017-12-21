@@ -4,7 +4,7 @@
 // ------------------------------------------------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
+using System.IO;
 
 namespace SonezakiMasaki
 {
@@ -12,6 +12,6 @@ namespace SonezakiMasaki
     {
         Type Type { get; }
 
-        IEnumerable<ISerializableValue> CreateValue();
+        ISerializableValue Instantiate( BinaryReader reader );
     }
 }

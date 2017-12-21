@@ -5,46 +5,37 @@
 
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 
 namespace SonezakiMasaki.Containers
 {
-    internal sealed class ListContainer : Container
+    internal sealed class ListContainer : ISerializableValue
     {
-        int _listLength;
-        IList _list;
+        readonly ListContainerDefinition _listDefinition;
+        readonly int _listLength;
 
-        public override ContainerId Id => ContainerId.List;
-
-        protected override object FinalValue => _list;
-
-        /// <inheritdoc />
-        protected override IEnumerable<ISerializableValue> ReadContainedValues( BinaryReader reader, ObjectSerializer objectSerializer )
+        public ListContainer( ListContainerDefinition listDefinition, int length )
         {
-            _listLength = reader.ReadInt32();
-            ITypeDefinition typeDefinition = objectSerializer.ReadNextTypeDefinition( reader );
+            _listDefinition = listDefinition;
+            _listLength = length;
+        }
+
+        public ContainerId Id => ContainerId.List;
+
+        public ITypeDefinition TypeDefinition => _listDefinition;
+
+        public object Read( BinaryReader reader )
+        {
+            IList list = (IList) Activator.CreateInstance( _listDefinition.Type, _listLength );
 
             for ( int index = 0; index < _listLength; ++index )
             {
-                yield return typeDefinition.CreateValue();
-            }
-        }
-
-        public void Prepare( ISerializableValue typeInfo )
-        {
-            Type listType = typeof( List<> ).MakeGenericType( typeInfo.Type );
-            _list = (IList) Activator.CreateInstance( listType, _listLength );
-        }
-
-        protected override void AddItem( object item )
-        {
-            if ( _list.Count >= _listLength )
-            {
-                throw new InvalidOperationException( "Attempting to read more items than there are in the list." );
+                ISerializableValue value = _listDefinition.ContentTypeDefinition.Instantiate( reader );
+                object deserializedValue = value.Read( reader );
+                list.Add( deserializedValue );
             }
 
-            _list.Add( item );
+            return list;
         }
     }
 }

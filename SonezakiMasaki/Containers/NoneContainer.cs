@@ -9,33 +9,13 @@ using System.IO;
 
 namespace SonezakiMasaki.Containers
 {
-    internal sealed class NoneContainer : Container
+    internal sealed class NoneContainer : ISerializableValue
     {
-        object _value;
+        public NoneContainer( )
 
-        public override ContainerId Id => ContainerId.None;
+        public ITypeDefinition TypeDefinition { get; }
 
-        protected override object FinalValue => _value;
+        public ContainerId Id => ContainerId.None;
 
-        /// <inheritdoc />
-        protected override IEnumerable<ISerializableValue> ReadContainedValues( BinaryReader reader, ObjectSerializer objectSerializer )
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <inheritdoc />
-        protected override void AddItem( object item )
-        {
-            if ( _value != null )
-            {
-                throw new InvalidOperationException( "A value has already been deserialized." );
-            }
-
-            _value = item;
-        }
-
-        public void Prepare( ISerializableValue typeInfo )
-        {
-        }
     }
 }

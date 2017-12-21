@@ -13,35 +13,44 @@ namespace SonezakiMasaki.Containers
     {
         static readonly IDictionary<Type, ListContainerDefinition> _cachedDefinitions = new Dictionary<Type, ListContainerDefinition>();
 
-        ListContainerDefinition( Type type )
+        ListContainerDefinition( Type type, ITypeDefinition contentTypeDefinition )
         {
             Type = type;
+            ContentTypeDefinition = contentTypeDefinition;
         }
 
         public Type Type { get; }
 
-        internal static ListContainerDefinition Read( BinaryReader reader, ObjectSerializer objectSerializer )
+        public ITypeDefinition ContentTypeDefinition { get; }
+
+        public ISerializableValue Instantiate( BinaryReader reader )
         {
-            ITypeDefinition listGenericType = objectSerializer.ReadNextTypeDefinition( reader );
-            return GetContainerDefinitionForType( listGenericType );
+            int listLength = reader.ReadInt32();
+            return new ListContainer( this, listLength );
         }
 
-        static ListContainerDefinition GetContainerDefinitionForType( ITypeDefinition typeDefinition )
+        internal static ListContainerDefinition GetDefinitionFor( BinaryReader reader, ObjectSerializer objectSerializer )
         {
-            if ( _cachedDefinitions.TryGetValue( typeDefinition.Type, out ListContainerDefinition cached ) )
+            ITypeDefinition contentTypeDefinition = objectSerializer.ReadNextTypeDefinition( reader );
+            return GetContainerDefinitionForType( contentTypeDefinition );
+        }
+
+        static ListContainerDefinition GetContainerDefinitionForType( ITypeDefinition contentTypeDefinition )
+        {
+            if ( _cachedDefinitions.TryGetValue( contentTypeDefinition.Type, out ListContainerDefinition cached ) )
             {
                 return cached;
             }
 
-            ListContainerDefinition containerDefinition = CreateContainerDefinitionForType( typeDefinition );
-            _cachedDefinitions.Add( typeDefinition.Type, containerDefinition );
+            ListContainerDefinition containerDefinition = CreateContainerDefinitionForType( contentTypeDefinition );
+            _cachedDefinitions.Add( contentTypeDefinition.Type, containerDefinition );
             return containerDefinition;
         }
 
-        static ListContainerDefinition CreateContainerDefinitionForType( ITypeDefinition typeDefinition )
+        static ListContainerDefinition CreateContainerDefinitionForType( ITypeDefinition contentTypeDefinition )
         {
-            Type listType = typeof( List<> ).MakeGenericType( typeDefinition.Type );
-            return new ListContainerDefinition( listType );
+            Type listType = typeof( List<> ).MakeGenericType( contentTypeDefinition.Type );
+            return new ListContainerDefinition( listType, contentTypeDefinition );
         }
     }
 }

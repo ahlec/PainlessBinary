@@ -13,8 +13,8 @@ namespace SonezakiMasaki.Containers
     {
         static readonly IReadOnlyDictionary<ContainerId, ContainerDefinitionCreator> _containers = new Dictionary<ContainerId, ContainerDefinitionCreator>
         {
-            { ContainerId.None, NoneContainerDefinition.Read },
-            { ContainerId.List, ListContainerDefinition.Read }
+            { ContainerId.None, NoneContainerDefinition.GetDefinitionFor },
+            { ContainerId.List, ListContainerDefinition.GetDefinitionFor }
         };
 
         delegate IContainerDefinition ContainerDefinitionCreator( BinaryReader reader, ObjectSerializer objectSerializer );

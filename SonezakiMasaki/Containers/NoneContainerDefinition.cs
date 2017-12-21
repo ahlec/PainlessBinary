@@ -20,7 +20,7 @@ namespace SonezakiMasaki.Containers
 
         public Type Type { get; }
 
-        internal static NoneContainerDefinition Read( BinaryReader reader, ObjectSerializer objectSerializer )
+        internal static NoneContainerDefinition GetDefinitionFor( BinaryReader reader, ObjectSerializer objectSerializer )
         {
             ITypeDefinition listGenericType = objectSerializer.ReadNextTypeDefinition( reader );
             return GetContainerDefinitionForType( listGenericType );
