@@ -53,6 +53,7 @@
     <Compile Include="Exceptions\DifferentFileTypeException.cs" />
     <Compile Include="Exceptions\SonezakiMasakiException.cs" />
     <Compile Include="Exceptions\UnrecognizedContainerException.cs" />
+    <Compile Include="Exceptions\UnrecognizedTypeException.cs" />
     <Compile Include="ISerializableValue.cs" />
     <Compile Include="ITypeDefinition.cs" />
     <Compile Include="ObjectSerializer.cs" />
