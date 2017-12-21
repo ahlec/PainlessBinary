@@ -3,19 +3,10 @@
 // This library is available to the public under the MIT license.
 // ------------------------------------------------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-
-namespace SonezakiMasaki.Containers
+namespace SonezakiMasaki
 {
-    internal sealed class NoneContainer : ISerializableValue
+    public sealed class SerializationFile<T>
     {
-        public NoneContainer( )
-
-        public ITypeDefinition TypeDefinition { get; }
-
-        public ContainerId Id => ContainerId.None;
-
+        public T Payload { get; set; }
     }
 }

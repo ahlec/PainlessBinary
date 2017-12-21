@@ -11,6 +11,6 @@ namespace SonezakiMasaki
     {
         ITypeDefinition TypeDefinition { get; }
 
-        object Read( BinaryReader reader );
+        object Read( BinaryReader reader, ObjectSerializer objectSerializer );
     }
 }

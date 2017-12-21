@@ -3,43 +3,54 @@
 // This library is available to the public under the MIT license.
 // ------------------------------------------------------------------------------------------------------------------------
 
+using System;
 using System.IO;
-using SonezakiMasaki.Containers;
+using SonezakiMasaki.Exceptions;
 
 namespace SonezakiMasaki
 {
     public sealed class Serializer
     {
-        readonly ContainerResolver _containerResolver = new ContainerResolver();
-        readonly TypeResolver _typeResolver;
+        readonly ObjectSerializer _objectSerializer;
 
-        public T Deserialize<T>( Stream dataStream )
+        public Serializer( TypeResolver typeResolver )
+        {
+            _objectSerializer = new ObjectSerializer( typeResolver ?? throw new ArgumentNullException( nameof( typeResolver ) ) );
+        }
+
+        public SerializationFile<T> DeserializeFile<T>( Stream dataStream )
         {
             using ( BinaryReader reader = new BinaryReader( dataStream ) )
             {
-                ISerializableValue typeInfo = _typeResolver.GetTypeInfoFromType( typeof( T ) );
-                return (T) DeserializeItem( reader, new NoneContainer(), typeInfo );
+                T payload = DeserializeFilePayload<T>( reader );
+                return new SerializationFile<T>
+                {
+                    Payload = payload
+                };
             }
         }
 
-        object DeserializeObject( BinaryReader reader )
+        static bool DoesTypeDefinitionMatchGenericType( ITypeDefinition typeDefinition, Type genericType )
         {
-            ReadObjectHeader( reader, out Container container, out ISerializableValue typeInfo );
-            return DeserializeItem( reader, container, typeInfo );
+            if ( genericType.IsInterface )
+            {
+                return typeDefinition.Type.IsInstanceOfType( genericType );
+            }
+
+            return typeDefinition.Type == genericType;
         }
 
-        object DeserializeItem( BinaryReader reader, Container container, ISerializableValue type )
+        T DeserializeFilePayload<T>( BinaryReader reader )
         {
-        }
+            ITypeDefinition fileTypeDefinition = _objectSerializer.ReadNextTypeDefinition( reader );
+            if ( !DoesTypeDefinitionMatchGenericType( fileTypeDefinition, typeof( T ) ) )
+            {
+                throw new DifferentFileTypeException( typeof( T ), fileTypeDefinition.Type );
+            }
 
-        void ReadObjectHeader( BinaryReader reader, out Container container, out ISerializableValue typeInfo )
-        {
-            byte containerId = reader.ReadByte();
-            container = _containerResolver.ResolveContainer( containerId );
-            container.ReadHeader( reader );
-
-            int typeId = reader.ReadInt32();
-            typeInfo = _typeResolver.ResolveType( typeId );
+            ISerializableValue value = fileTypeDefinition.Instantiate( reader );
+            object payload = value.Read( reader, _objectSerializer );
+            return (T) payload;
         }
     }
 }

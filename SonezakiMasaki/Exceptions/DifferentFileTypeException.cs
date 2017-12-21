@@ -3,16 +3,21 @@
 // This library is available to the public under the MIT license.
 // ------------------------------------------------------------------------------------------------------------------------
 
+using System;
+
 namespace SonezakiMasaki.Exceptions
 {
-    public sealed class UnrecognizedContainerException : SonezakiMasakiException
+    public sealed class DifferentFileTypeException : SonezakiMasakiException
     {
-        internal UnrecognizedContainerException( uint containerId )
-            : base( $"There is no container with the encountered ID of {containerId}." )
+        internal DifferentFileTypeException( Type expectedFileType, Type actualFileType )
+            : base( $"Expected the file type to be of type {expectedFileType.Name}, but it was actually {actualFileType.Name}" )
         {
-            ContainerId = containerId;
+            ExpectedFileType = expectedFileType;
+            ActualFileType = actualFileType;
         }
 
-        public uint ContainerId { get; }
+        public Type ExpectedFileType { get; }
+
+        public Type ActualFileType { get; }
     }
 }

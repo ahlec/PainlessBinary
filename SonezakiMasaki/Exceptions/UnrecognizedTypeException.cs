@@ -3,11 +3,16 @@
 // This library is available to the public under the MIT license.
 // ------------------------------------------------------------------------------------------------------------------------
 
-namespace SonezakiMasaki.Containers
+namespace SonezakiMasaki.Exceptions
 {
-    internal enum ContainerId
+    public sealed class UnrecognizedTypeException : SonezakiMasakiException
     {
-        Array = 0,
-        List = 1
+        internal UnrecognizedTypeException( uint typeId )
+            : base( $"There is no type with the encountered ID of {typeId}." )
+        {
+            TypeId = typeId;
+        }
+
+        public uint TypeId { get; }
     }
 }

@@ -24,14 +24,14 @@ namespace SonezakiMasaki.Containers
 
         public ITypeDefinition TypeDefinition => _listDefinition;
 
-        public object Read( BinaryReader reader )
+        public object Read( BinaryReader reader, ObjectSerializer objectSerializer )
         {
             IList list = (IList) Activator.CreateInstance( _listDefinition.Type, _listLength );
 
             for ( int index = 0; index < _listLength; ++index )
             {
                 ISerializableValue value = _listDefinition.ContentTypeDefinition.Instantiate( reader );
-                object deserializedValue = value.Read( reader );
+                object deserializedValue = value.Read( reader, objectSerializer );
                 list.Add( deserializedValue );
             }
 

@@ -50,15 +50,14 @@
     <Compile Include="Containers\IContainerDefinition.cs" />
     <Compile Include="Containers\ListContainer.cs" />
     <Compile Include="Containers\ListContainerDefinition.cs" />
-    <Compile Include="Containers\NoneContainer.cs" />
-    <Compile Include="Containers\Container.cs" />
-    <Compile Include="Containers\NoneContainerDefinition.cs" />
+    <Compile Include="Exceptions\DifferentFileTypeException.cs" />
     <Compile Include="Exceptions\SonezakiMasakiException.cs" />
     <Compile Include="Exceptions\UnrecognizedContainerException.cs" />
     <Compile Include="ISerializableValue.cs" />
     <Compile Include="ITypeDefinition.cs" />
     <Compile Include="ObjectSerializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SerializationFile.cs" />
     <Compile Include="SerializedFieldAttribute.cs" />
     <Compile Include="Serializer.cs" />
     <Compile Include="TypeResolver.cs" />

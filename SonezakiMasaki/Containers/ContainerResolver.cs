@@ -13,13 +13,12 @@ namespace SonezakiMasaki.Containers
     {
         static readonly IReadOnlyDictionary<ContainerId, ContainerDefinitionCreator> _containers = new Dictionary<ContainerId, ContainerDefinitionCreator>
         {
-            { ContainerId.None, NoneContainerDefinition.GetDefinitionFor },
             { ContainerId.List, ListContainerDefinition.GetDefinitionFor }
         };
 
         delegate IContainerDefinition ContainerDefinitionCreator( BinaryReader reader, ObjectSerializer objectSerializer );
 
-        public IContainerDefinition ResolveContainer( int containerId, BinaryReader reader, ObjectSerializer objectSerializer )
+        public IContainerDefinition ResolveContainer( uint containerId, BinaryReader reader, ObjectSerializer objectSerializer )
         {
             if ( !_containers.TryGetValue( (ContainerId) containerId, out ContainerDefinitionCreator creator ) )
             {

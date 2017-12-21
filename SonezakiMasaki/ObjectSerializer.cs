@@ -11,12 +11,11 @@ namespace SonezakiMasaki
 {
     internal sealed class ObjectSerializer
     {
-        readonly ContainerResolver _containerResolver;
+        readonly ContainerResolver _containerResolver = new ContainerResolver();
         readonly TypeResolver _typeResolver;
 
-        public ObjectSerializer( ContainerResolver containerResolver, TypeResolver typeResolver )
+        public ObjectSerializer( TypeResolver typeResolver )
         {
-            _containerResolver = containerResolver;
             _typeResolver = typeResolver;
         }
 
@@ -29,12 +28,12 @@ namespace SonezakiMasaki
         public ITypeDefinition ReadNextTypeDefinition( BinaryReader reader )
         {
             TypeCategory category = (TypeCategory) reader.ReadByte();
-            int typeId = reader.ReadInt32();
+            uint typeId = reader.ReadUInt32();
             ITypeDefinition typeInfo = ResolveTypeInfo( category, typeId, reader );
             return typeInfo;
         }
 
-        ITypeDefinition ResolveTypeInfo( TypeCategory category, int typeId, BinaryReader reader )
+        ITypeDefinition ResolveTypeInfo( TypeCategory category, uint typeId, BinaryReader reader )
         {
             switch ( category )
             {
