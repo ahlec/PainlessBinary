@@ -8,10 +8,10 @@ using System.IO;
 
 namespace SonezakiMasaki
 {
-    internal abstract class TypeDefinition
+    internal sealed class TypeInstantiator
     {
-        public Type Type { get; }
-
-        public abstract ISerializableValue Instantiate( BinaryReader reader );
+        public ISerializableValue Instantiate( Type type, BinaryReader reader )
+        {
+        }
     }
 }

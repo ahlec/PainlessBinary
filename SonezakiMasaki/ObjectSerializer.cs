@@ -18,14 +18,12 @@ namespace SonezakiMasaki
             _typeResolver = typeResolver;
         }
 
-        public TypeDefinition ReadNextTypeDefinition( BinaryReader reader )
+        public Type ReadNextType( BinaryReader reader )
         {
             uint typeId = reader.ReadUInt32();
             Type baseType = _typeResolver.ResolveType( typeId );
             Type type = CompleteType( baseType, reader );
-
-            TypeDefinition typeDefinition = TypeDefinition.ReadDefinition( baseType, reader, this );
-            return typeDefinition;
+            return type;
         }
 
         Type CompleteType( Type baseType, BinaryReader reader )
@@ -45,8 +43,7 @@ namespace SonezakiMasaki
 
             for ( int index = 0; index < numGenericParameters; ++index )
             {
-                TypeDefinition argumentTypeDefinition = ReadNextTypeDefinition( reader );
-                genericArguments[index] = argumentTypeDefinition.Type;
+                genericArguments[index] = ReadNextType( reader );
             }
 
             return baseType.MakeGenericType( genericArguments );

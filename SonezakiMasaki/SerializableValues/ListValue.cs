@@ -7,28 +7,28 @@ using System;
 using System.Collections;
 using System.IO;
 
-namespace SonezakiMasaki.Containers
+namespace SonezakiMasaki.SerializableValues
 {
-    internal sealed class ListContainer : ISerializableValue
+    internal sealed class ListValue : ISerializableValue
     {
-        readonly ListContainerDefinition _listDefinition;
+        readonly Type _listType;
+        readonly TypeInstantiator _typeInstantiator;
         readonly int _listLength;
 
-        public ListContainer( ListContainerDefinition listDefinition, int length )
+        public ListValue( Type listType, TypeInstantiator typeInstantiator, int length )
         {
-            _listDefinition = listDefinition;
+            _listType = listType;
+            _typeInstantiator = typeInstantiator;
             _listLength = length;
         }
 
-        public TypeDefinition TypeDefinition => _listDefinition;
-
         public object Read( BinaryReader reader, ObjectSerializer objectSerializer )
         {
-            IList list = (IList) Activator.CreateInstance( _listDefinition.Type, _listLength );
+            IList list = (IList) Activator.CreateInstance( _listType, _listLength );
 
             for ( int index = 0; index < _listLength; ++index )
             {
-                ISerializableValue value = _listDefinition.ContentTypeDefinition.Instantiate( reader );
+                ISerializableValue value = _typeInstantiator.Instantiate( _listType.GenericTypeArguments[0], reader );
                 object deserializedValue = value.Read( reader, objectSerializer );
                 list.Add( deserializedValue );
             }

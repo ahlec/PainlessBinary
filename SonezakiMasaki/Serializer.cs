@@ -12,6 +12,7 @@ namespace SonezakiMasaki
     public sealed class Serializer
     {
         readonly ObjectSerializer _objectSerializer;
+        readonly TypeInstantiator _typeInstantiator = new TypeInstantiator();
 
         public Serializer( TypeResolver typeResolver )
         {
@@ -30,25 +31,15 @@ namespace SonezakiMasaki
             }
         }
 
-        static bool DoesTypeDefinitionMatchGenericType( TypeDefinition typeDefinition, Type genericType )
-        {
-            if ( genericType.IsInterface )
-            {
-                return typeDefinition.Type.IsInstanceOfType( genericType );
-            }
-
-            return typeDefinition.Type == genericType;
-        }
-
         T DeserializeFilePayload<T>( BinaryReader reader )
         {
-            TypeDefinition fileTypeDefinition = _objectSerializer.ReadNextTypeDefinition( reader );
-            if ( !DoesTypeDefinitionMatchGenericType( fileTypeDefinition, typeof( T ) ) )
+            Type fileType = _objectSerializer.ReadNextType( reader );
+            if ( fileType != typeof( T ) )
             {
-                throw new DifferentFileTypeException( typeof( T ), fileTypeDefinition.Type );
+                throw new DifferentFileTypeException( typeof( T ), fileType );
             }
 
-            ISerializableValue value = fileTypeDefinition.Instantiate( reader );
+            ISerializableValue value = _typeInstantiator.Instantiate( fileType, reader );
             object payload = value.Read( reader, _objectSerializer );
             return (T) payload;
         }

@@ -9,8 +9,6 @@ namespace SonezakiMasaki
 {
     internal interface ISerializableValue
     {
-        TypeDefinition TypeDefinition { get; }
-
         object Read( BinaryReader reader, ObjectSerializer objectSerializer );
     }
 }
