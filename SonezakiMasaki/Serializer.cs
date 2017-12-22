@@ -30,7 +30,7 @@ namespace SonezakiMasaki
             }
         }
 
-        static bool DoesTypeDefinitionMatchGenericType( ITypeDefinition typeDefinition, Type genericType )
+        static bool DoesTypeDefinitionMatchGenericType( TypeDefinition typeDefinition, Type genericType )
         {
             if ( genericType.IsInterface )
             {
@@ -42,7 +42,7 @@ namespace SonezakiMasaki
 
         T DeserializeFilePayload<T>( BinaryReader reader )
         {
-            ITypeDefinition fileTypeDefinition = _objectSerializer.ReadNextTypeDefinition( reader );
+            TypeDefinition fileTypeDefinition = _objectSerializer.ReadNextTypeDefinition( reader );
             if ( !DoesTypeDefinitionMatchGenericType( fileTypeDefinition, typeof( T ) ) )
             {
                 throw new DifferentFileTypeException( typeof( T ), fileTypeDefinition.Type );

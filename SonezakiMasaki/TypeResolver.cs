@@ -3,6 +3,7 @@
 // This library is available to the public under the MIT license.
 // ------------------------------------------------------------------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
 using SonezakiMasaki.Exceptions;
 
@@ -10,19 +11,16 @@ namespace SonezakiMasaki
 {
     public sealed class TypeResolver
     {
-        readonly IDictionary<uint, ITypeDefinition> _typeDefinitions = new Dictionary<uint, ITypeDefinition>();
+        readonly IDictionary<uint, Type> _registeredTypes = new Dictionary<uint, Type>();
 
-        internal ITypeDefinition ResolveType( uint typeId )
+        internal Type ResolveType( uint typeId )
         {
-            if ( !_typeDefinitions.TryGetValue( typeId, out ITypeDefinition typeDefinition ) )
+            if ( !_registeredTypes.TryGetValue( typeId, out Type baseType ) )
             {
                 throw new UnrecognizedTypeException( typeId );
             }
 
-            // TODO: We probably want to merge containers and types because we need to read header here to determine type
-            // TODO: same as container, because what of things like Animal<Human>?
-
-            return typeDefinition;
+            return baseType;
         }
     }
 }

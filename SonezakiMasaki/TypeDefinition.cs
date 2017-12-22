@@ -3,11 +3,15 @@
 // This library is available to the public under the MIT license.
 // ------------------------------------------------------------------------------------------------------------------------
 
-namespace SonezakiMasaki.Containers
+using System;
+using System.IO;
+
+namespace SonezakiMasaki
 {
-    internal enum ContainerId
+    internal abstract class TypeDefinition
     {
-        Array = 0,
-        List = 1
+        public Type Type { get; }
+
+        public abstract ISerializableValue Instantiate( BinaryReader reader );
     }
 }

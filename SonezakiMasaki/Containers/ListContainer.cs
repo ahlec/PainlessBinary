@@ -20,9 +20,7 @@ namespace SonezakiMasaki.Containers
             _listLength = length;
         }
 
-        public ContainerId Id => ContainerId.List;
-
-        public ITypeDefinition TypeDefinition => _listDefinition;
+        public TypeDefinition TypeDefinition => _listDefinition;
 
         public object Read( BinaryReader reader, ObjectSerializer objectSerializer )
         {
