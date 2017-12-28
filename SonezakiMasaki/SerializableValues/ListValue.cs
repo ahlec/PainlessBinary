@@ -15,11 +15,17 @@ namespace SonezakiMasaki.SerializableValues
         readonly TypeInstantiator _typeInstantiator;
         readonly int _listLength;
 
-        public ListValue( Type listType, TypeInstantiator typeInstantiator, int length )
+        ListValue( Type listType, TypeInstantiator typeInstantiator, int length )
         {
             _listType = listType;
             _typeInstantiator = typeInstantiator;
             _listLength = length;
+        }
+
+        public static ListValue Instantiate( TypeInstantiator typeInstantiator, Type fullType, BinaryReader reader )
+        {
+            int listLength = reader.ReadInt32();
+            return new ListValue( fullType, typeInstantiator, listLength );
         }
 
         public object Read( BinaryReader reader, ObjectSerializer objectSerializer )

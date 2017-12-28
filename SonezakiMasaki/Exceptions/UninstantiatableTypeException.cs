@@ -3,16 +3,21 @@
 // This library is available to the public under the MIT license.
 // ------------------------------------------------------------------------------------------------------------------------
 
+using System;
+
 namespace SonezakiMasaki.Exceptions
 {
-    public sealed class UnrecognizedContainerException : SonezakiMasakiException
+    public sealed class UninstantiatableTypeException : SonezakiMasakiException
     {
-        internal UnrecognizedContainerException( uint containerId )
-            : base( $"There is no container with the encountered ID of {containerId}." )
+        internal UninstantiatableTypeException( Type baseType, Type fullType )
+            : base( $"The type {baseType} could not be instantiated." )
         {
-            ContainerId = containerId;
+            BaseType = baseType;
+            FullType = fullType;
         }
 
-        public uint ContainerId { get; }
+        public Type BaseType { get; }
+
+        public Type FullType { get; }
     }
 }
