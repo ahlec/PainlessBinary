@@ -6,9 +6,6 @@ namespace BinaryExplorer
 {
     public partial class MainWindow
     {
-        const int TypeIdInt = 8;
-        const int TypeIdList = 15;
-
         public MainWindow()
         {
             InitializeComponent();
@@ -16,11 +13,13 @@ namespace BinaryExplorer
             const string Filename = @"test-data.bin";
 
             TypeManager typeManager = new TypeManager();
+            typeManager.RegisterType<Person>();
+
             Serializer serializer = new Serializer( typeManager );
 
             CreateTestFile( serializer, Filename );
 
-            SerializationFile<List<List<int>>> file = DeserializeFile<List<List<int>>>( serializer, Filename );
+            SerializationFile<List<Person>> file = DeserializeFile<List<Person>>( serializer, Filename );
 
             file.ToString();
         }
@@ -29,28 +28,21 @@ namespace BinaryExplorer
         {
             using ( Stream fileStream = File.Create( filename ) )
             {
-                serializer.SerializeFile( fileStream, new SerializationFile<List<List<int>>>
+                serializer.SerializeFile( fileStream, new SerializationFile<List<Person>>
                 {
-                    Payload = new List<List<int>>
+                    Payload = new List<Person>
                     {
-                        new List<int>
+                        new Person
                         {
-                            1,
-                            2,
-                            3
+                            FirstName = "Jack",
+                            LastName = "Frost",
+                            Age = 17
                         },
-                        new List<int>
+                        new Person
                         {
-                            10,
-                            12,
-                            14,
-                            16,
-                            18,
-                            20
-                        },
-                        new List<int>
-                        {
-                            17
+                            FirstName = "Alec",
+                            LastName = "Deitloff",
+                            Age = 25
                         }
                     }
                 } );
