@@ -24,6 +24,16 @@ namespace SonezakiMasaki
             RegisterBuiltInTypes();
         }
 
+        public void RegisterType<T>()
+        {
+            if ( _registeredTypes.Contains( typeof( T ) ) )
+            {
+                throw new InvalidOperationException( $"The type {typeof( T )} has already been registered." );
+            }
+
+            RegisterTypeInternal( ref _nextProprietaryType, typeof( T ), ReflectedClassValue<T>.Instantiate, ReflectedClassValue<T>.WrapRawValue );
+        }
+
         internal Type ResolveType( uint typeId )
         {
             if ( !_registeredTypes.TryGetValue( typeId, out RegisteredType registeredType ) )

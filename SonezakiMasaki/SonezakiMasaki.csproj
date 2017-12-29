@@ -49,6 +49,9 @@
     <Compile Include="IO\ReadWriteOperations.cs" />
     <Compile Include="IO\StandardReadWriteOperations.cs" />
     <Compile Include="MultiKeyDictionary.cs" />
+    <Compile Include="Reflection\SerializedMember.cs" />
+    <Compile Include="Reflection\SerializedField.cs" />
+    <Compile Include="Reflection\SerializedProperty.cs" />
     <Compile Include="RegisteredType.cs" />
     <Compile Include="SerializableValues\BuiltInValue.cs" />
     <Compile Include="SerializableValues\ListValue.cs" />
@@ -59,8 +62,9 @@
     <Compile Include="ISerializableValue.cs" />
     <Compile Include="ObjectSerializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SerializableValues\ReflectedClassValue.cs" />
     <Compile Include="SerializationFile.cs" />
-    <Compile Include="SerializedFieldAttribute.cs" />
+    <Compile Include="SerializedMemberAttribute.cs" />
     <Compile Include="Serializer.cs" />
     <Compile Include="TypeManager.cs" />
   </ItemGroup>

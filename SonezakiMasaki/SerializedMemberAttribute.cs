@@ -8,9 +8,9 @@ using System;
 namespace SonezakiMasaki
 {
     [AttributeUsage( AttributeTargets.Field | AttributeTargets.Property )]
-    internal sealed class SerializedFieldAttribute : Attribute
+    internal sealed class SerializedMemberAttribute : Attribute
     {
-        public SerializedFieldAttribute( int order )
+        public SerializedMemberAttribute( int order )
         {
             Order = order;
         }
