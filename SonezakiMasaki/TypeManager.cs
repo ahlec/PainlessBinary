@@ -23,6 +23,7 @@ namespace SonezakiMasaki
         public TypeManager()
         {
             RegisterBuiltInTypes();
+            RegisterSpecialTypes();
         }
 
         public void RegisterType<T>()
@@ -71,6 +72,11 @@ namespace SonezakiMasaki
             return serializableValue;
         }
 
+        static bool IsSpecialRegisteredType( Type baseType )
+        {
+            return baseType.IsArray;
+        }
+
         RegisteredType GetRegisteredType( Type type )
         {
             Type baseType = type;
@@ -92,16 +98,11 @@ namespace SonezakiMasaki
             return registeredType;
         }
 
-        bool IsSpecialRegisteredType( Type baseType )
-        {
-            return baseType.IsArray;
-        }
-
         bool TryGetSpecialRegisteredType( Type baseType, out RegisteredType registeredType )
         {
             if ( baseType.IsArray )
             {
-
+                return _registeredTypes.TryGetValue( _arrayId, out registeredType );
             }
 
             registeredType = null;
@@ -126,6 +127,12 @@ namespace SonezakiMasaki
             RegisterBuiltInValueType( StandardReadWriteOperations.String );
 
             RegisterBuiltInType( typeof( List<> ), StandardTypeSignature.Create, ListValue.Instantiate, ListValue.WrapRawValue );
+        }
+
+        void RegisterSpecialTypes()
+        {
+            // Special type for ALL arrays! We just need *A* type here, so we'll use object[]. We ignore this value otherwise.
+            _arrayId = RegisterBuiltInType( typeof( object[] ), ArrayTypeSignature.Create, ArrayValue.Instantiate, ArrayValue.WrapRawValue );
         }
 
         void RegisterBuiltInValueType<T>( ReadWriteOperations<T> operations )

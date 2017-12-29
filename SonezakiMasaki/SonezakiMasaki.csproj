@@ -66,10 +66,12 @@
     <Compile Include="Exceptions\UnrecognizedTypeException.cs" />
     <Compile Include="ISerializableValue.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SerializableValues\ArrayValue.cs" />
     <Compile Include="SerializableValues\ReflectedClassValue.cs" />
     <Compile Include="SerializationFile.cs" />
     <Compile Include="SerializedMemberAttribute.cs" />
     <Compile Include="Serializer.cs" />
+    <Compile Include="TypeSignatures\ArrayTypeSignature.cs" />
     <Compile Include="TypeSignatures\ITypeSignature.cs" />
     <Compile Include="TypeSignatures\StandardTypeSignature.cs" />
     <Compile Include="TypeManager.cs" />

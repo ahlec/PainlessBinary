@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using SonezakiMasaki;
 
@@ -12,8 +13,14 @@ namespace BinaryExplorer
 
             const string Filename = @"test-data.bin";
 
+            Type r1 = typeof( string[] );
+            Type r2 = typeof( string[,] );
+            Type r3 = typeof( string[][] );
+
             TypeManager typeManager = new TypeManager();
             typeManager.RegisterType<Person>();
+            typeManager.RegisterType<Date>();
+            typeManager.RegisterType<Month>();
 
             Serializer serializer = new Serializer( typeManager );
 
@@ -36,13 +43,35 @@ namespace BinaryExplorer
                         {
                             FirstName = "Jack",
                             LastName = "Frost",
-                            Age = 17
+                            Age = 17,
+                            Birthday = new Date
+                            {
+                                Day = 21,
+                                Month = Month.December,
+                                Year = 1712
+                            },
+                            OtherNames = new[]
+                            {
+                                "Jackie",
+                                "Jackson",
+                                "Jokul"
+                            }
                         },
                         new Person
                         {
                             FirstName = "Alec",
                             LastName = "Deitloff",
-                            Age = 25
+                            Age = 25,
+                            Birthday = new Date
+                            {
+                                Day = 26,
+                                Month = Month.October,
+                                Year = 1992
+                            },
+                            OtherNames = new[]
+                            {
+                                "Jacob"
+                            }
                         }
                     }
                 } );

@@ -12,5 +12,11 @@ namespace BinaryExplorer
 
         [SerializedMember( 3 )]
         public int Age { get; set; }
+
+        [SerializedMember( 4 )]
+        public Date Birthday { get; set; }
+
+        [SerializedMember( 5 )]
+        public string[] OtherNames { get; set; }
     }
 }
