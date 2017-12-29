@@ -3,7 +3,7 @@
 // This library is available to the public under the MIT license.
 // ------------------------------------------------------------------------------------------------------------------------
 
-using System.IO;
+using SonezakiMasaki.IO;
 
 namespace SonezakiMasaki
 {
@@ -11,8 +11,8 @@ namespace SonezakiMasaki
     {
         object Value { get; }
 
-        void Read( BinaryReader reader, ObjectSerializer objectSerializer );
+        void Read( SonezakiReader reader, ObjectSerializer objectSerializer );
 
-        void Write( BinaryWriter writer, ObjectSerializer objectSerializer );
+        void Write( SonezakiWriter writer, ObjectSerializer objectSerializer );
     }
 }

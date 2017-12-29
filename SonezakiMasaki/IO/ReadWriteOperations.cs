@@ -3,8 +3,6 @@
 // This library is available to the public under the MIT license.
 // ------------------------------------------------------------------------------------------------------------------------
 
-using System.IO;
-
 namespace SonezakiMasaki.IO
 {
     internal sealed class ReadWriteOperations<T>
@@ -15,9 +13,9 @@ namespace SonezakiMasaki.IO
             WriteFunction = writeFunction;
         }
 
-        internal delegate T BinaryReadFunction( BinaryReader reader );
+        internal delegate T BinaryReadFunction( SonezakiReader reader );
 
-        internal delegate void BinaryWriteFunction( BinaryWriter writer, T value );
+        internal delegate void BinaryWriteFunction( SonezakiWriter writer, T value );
 
         public BinaryReadFunction ReadFunction { get; }
 

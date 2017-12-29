@@ -61,7 +61,7 @@ namespace SonezakiMasaki
             return registeredType;
         }
 
-        internal ISerializableValue Instantiate( Type type, BinaryReader reader )
+        internal ISerializableValue Instantiate( Type type, SonezakiReader reader )
         {
             RegisteredType registeredType = GetRegisteredType( type );
             ISerializableValue value = registeredType.Instantiate( type, reader );

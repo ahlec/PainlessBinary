@@ -5,7 +5,7 @@
 
 using System;
 using System.Collections;
-using System.IO;
+using SonezakiMasaki.IO;
 
 namespace SonezakiMasaki.SerializableValues
 {
@@ -26,7 +26,7 @@ namespace SonezakiMasaki.SerializableValues
 
         public object Value => _list;
 
-        public static ListValue Instantiate( TypeManager typeManager, Type fullType, BinaryReader reader )
+        public static ListValue Instantiate( TypeManager typeManager, Type fullType, SonezakiReader reader )
         {
             int listLength = reader.ReadInt32();
             IList list = (IList) Activator.CreateInstance( fullType, listLength );
@@ -39,7 +39,7 @@ namespace SonezakiMasaki.SerializableValues
             return new ListValue( typeManager, value.GetType(), list, list.Count );
         }
 
-        public void Read( BinaryReader reader, ObjectSerializer objectSerializer )
+        public void Read( SonezakiReader reader, ObjectSerializer objectSerializer )
         {
             for ( int index = 0; index < _listLength; ++index )
             {
@@ -49,7 +49,7 @@ namespace SonezakiMasaki.SerializableValues
             }
         }
 
-        public void Write( BinaryWriter writer, ObjectSerializer objectSerializer )
+        public void Write( SonezakiWriter writer, ObjectSerializer objectSerializer )
         {
             writer.Write( _list.Count );
 

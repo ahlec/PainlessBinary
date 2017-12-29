@@ -4,8 +4,8 @@
 // ------------------------------------------------------------------------------------------------------------------------
 
 using System;
-using System.IO;
 using System.Linq;
+using SonezakiMasaki.IO;
 
 namespace SonezakiMasaki
 {
@@ -18,7 +18,7 @@ namespace SonezakiMasaki
             _typeManager = typeManager;
         }
 
-        public Type ReadNextType( BinaryReader reader )
+        public Type ReadNextType( SonezakiReader reader )
         {
             uint typeId = reader.ReadUInt32();
             Type baseType = _typeManager.ResolveType( typeId );
@@ -32,7 +32,7 @@ namespace SonezakiMasaki
             return ResolveGenericArguments( baseType, numGenericParameters, reader );
         }
 
-        public void WriteType( BinaryWriter writer, Type type )
+        public void WriteType( SonezakiWriter writer, Type type )
         {
             if ( type.ContainsGenericParameters )
             {
@@ -54,7 +54,7 @@ namespace SonezakiMasaki
             return numGenericParameters;
         }
 
-        Type ResolveGenericArguments( Type baseType, int numGenericParameters, BinaryReader reader )
+        Type ResolveGenericArguments( Type baseType, int numGenericParameters, SonezakiReader reader )
         {
             Type[] genericArguments = new Type[numGenericParameters];
 
@@ -66,7 +66,7 @@ namespace SonezakiMasaki
             return baseType.MakeGenericType( genericArguments );
         }
 
-        void WriteRegisteredType( BinaryWriter writer, RegisteredType registeredType, Type fullType )
+        void WriteRegisteredType( SonezakiWriter writer, RegisteredType registeredType, Type fullType )
         {
             writer.Write( registeredType.Id );
 

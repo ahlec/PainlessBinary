@@ -6,6 +6,7 @@
 using System;
 using System.IO;
 using SonezakiMasaki.Exceptions;
+using SonezakiMasaki.IO;
 
 namespace SonezakiMasaki
 {
@@ -20,6 +21,10 @@ namespace SonezakiMasaki
             _objectSerializer = new ObjectSerializer( typeManager );
         }
 
+        public int HashBaseValue { get; set; } = 31;
+
+        public int HashMultiplicationConstant { get; set; } = 17;
+
         public void SerializeFile<T>( Stream dataStream, SerializationFile<T> file )
         {
             if ( file == null )
@@ -27,28 +32,39 @@ namespace SonezakiMasaki
                 throw new ArgumentNullException( nameof( file ) );
             }
 
-            using ( BinaryWriter writer = new BinaryWriter( dataStream ) )
+            using ( SonezakiStreamWrapper streamWrapper = new SonezakiStreamWrapper( dataStream ) )
             {
-                _objectSerializer.WriteType( writer, typeof( T ) );
-
-                ISerializableValue wrappedValue = _typeManager.WrapRawValue( typeof( T ), file.Payload );
-                wrappedValue.Write( writer, _objectSerializer );
+                using ( SonezakiWriter writer = new SonezakiWriter( streamWrapper, HashBaseValue, HashMultiplicationConstant ) )
+                {
+                    SerializeFilePayload( writer, file.Payload );
+                }
             }
         }
 
         public SerializationFile<T> DeserializeFile<T>( Stream dataStream )
         {
-            using ( BinaryReader reader = new BinaryReader( dataStream ) )
+            using ( SonezakiStreamWrapper streamWrapper = new SonezakiStreamWrapper( dataStream ) )
             {
-                T payload = DeserializeFilePayload<T>( reader );
-                return new SerializationFile<T>
+                using ( SonezakiReader reader = new SonezakiReader( streamWrapper, HashBaseValue, HashMultiplicationConstant ) )
                 {
-                    Payload = payload
-                };
+                    T payload = DeserializeFilePayload<T>( reader );
+                    return new SerializationFile<T>
+                    {
+                        Payload = payload
+                    };
+                }
             }
         }
 
-        T DeserializeFilePayload<T>( BinaryReader reader )
+        void SerializeFilePayload<T>( SonezakiWriter writer, T payload )
+        {
+            _objectSerializer.WriteType( writer, typeof( T ) );
+
+            ISerializableValue wrappedValue = _typeManager.WrapRawValue( typeof( T ), payload );
+            wrappedValue.Write( writer, _objectSerializer );
+        }
+
+        T DeserializeFilePayload<T>( SonezakiReader reader )
         {
             Type fileType = _objectSerializer.ReadNextType( reader );
             if ( fileType != typeof( T ) )

@@ -5,7 +5,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
+using SonezakiMasaki.Exceptions;
+using SonezakiMasaki.IO;
 using SonezakiMasaki.Reflection;
 
 namespace SonezakiMasaki.SerializableValues
@@ -23,7 +24,7 @@ namespace SonezakiMasaki.SerializableValues
 
         public object Value { get; }
 
-        public static ReflectedClassValue<T> Instantiate( TypeManager typeManager, Type fullType, BinaryReader reader )
+        public static ReflectedClassValue<T> Instantiate( TypeManager typeManager, Type fullType, SonezakiReader reader )
         {
             object value = Activator.CreateInstance( typeof( T ) );
             return new ReflectedClassValue<T>( typeManager, value );
@@ -34,8 +35,10 @@ namespace SonezakiMasaki.SerializableValues
             return new ReflectedClassValue<T>( typeManager, value );
         }
 
-        public void Read( BinaryReader reader, ObjectSerializer objectSerializer )
+        public void Read( SonezakiReader reader, ObjectSerializer objectSerializer )
         {
+            reader.PushCompoundingHash();
+
             foreach ( SerializedMember member in _members )
             {
                 Type memberType = objectSerializer.ReadNextType( reader );
@@ -43,10 +46,19 @@ namespace SonezakiMasaki.SerializableValues
                 serializableValue.Read( reader, objectSerializer );
                 member.SetValue( Value, serializableValue.Value );
             }
+
+            int computedHash = reader.PopCompoundingHash();
+            int readHash = reader.ReadInt32();
+            if ( computedHash != readHash )
+            {
+                throw new DataIntegrityQuestionableException( computedHash, readHash );
+            }
         }
 
-        public void Write( BinaryWriter writer, ObjectSerializer objectSerializer )
+        public void Write( SonezakiWriter writer, ObjectSerializer objectSerializer )
         {
+            writer.PushCompoundingHash();
+
             foreach ( SerializedMember member in _members )
             {
                 object rawValue = member.GetValue( Value );
@@ -54,6 +66,9 @@ namespace SonezakiMasaki.SerializableValues
                 objectSerializer.WriteType( writer, member.Type );
                 value.Write( writer, objectSerializer );
             }
+
+            int computedHash = writer.PopCompoundingHash();
+            writer.Write( computedHash );
         }
     }
 }

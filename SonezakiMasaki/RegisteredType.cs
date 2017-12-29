@@ -5,10 +5,11 @@
 
 using System;
 using System.IO;
+using SonezakiMasaki.IO;
 
 namespace SonezakiMasaki
 {
-    internal delegate ISerializableValue ValueInstantiator( TypeManager typeManager, Type fullType, BinaryReader reader );
+    internal delegate ISerializableValue ValueInstantiator( TypeManager typeManager, Type fullType, SonezakiReader reader );
 
     internal delegate ISerializableValue ValueWrapper( TypeManager typeManager, object value );
 
@@ -35,7 +36,7 @@ namespace SonezakiMasaki
 
         public Type Key2 => Type;
 
-        public ISerializableValue Instantiate( Type fullType, BinaryReader reader )
+        public ISerializableValue Instantiate( Type fullType, SonezakiReader reader )
         {
             return _instantiator( _typeManager, fullType, reader );
         }
