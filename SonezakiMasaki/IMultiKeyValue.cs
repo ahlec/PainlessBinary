@@ -3,24 +3,12 @@
 // This library is available to the public under the MIT license.
 // ------------------------------------------------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using SonezakiMasaki.Exceptions;
-
 namespace SonezakiMasaki
 {
-    public sealed class TypeResolver
+    internal interface IMultiKeyValue<out TKey1, out TKey2>
     {
-        readonly IDictionary<uint, Type> _registeredTypes = new Dictionary<uint, Type>();
+        TKey1 Key1 { get; }
 
-        internal Type ResolveType( uint typeId )
-        {
-            if ( !_registeredTypes.TryGetValue( typeId, out Type baseType ) )
-            {
-                throw new UnrecognizedTypeException( typeId );
-            }
-
-            return baseType;
-        }
+        TKey2 Key2 { get; }
     }
 }

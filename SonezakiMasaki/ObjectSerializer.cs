@@ -11,17 +11,17 @@ namespace SonezakiMasaki
 {
     internal sealed class ObjectSerializer
     {
-        readonly TypeResolver _typeResolver;
+        readonly TypeManager _typeManager;
 
-        public ObjectSerializer( TypeResolver typeResolver )
+        public ObjectSerializer( TypeManager typeManager )
         {
-            _typeResolver = typeResolver;
+            _typeManager = typeManager;
         }
 
         public Type ReadNextType( BinaryReader reader )
         {
             uint typeId = reader.ReadUInt32();
-            Type baseType = _typeResolver.ResolveType( typeId );
+            Type baseType = _typeManager.ResolveType( typeId );
             Type type = CompleteType( baseType, reader );
             return type;
         }

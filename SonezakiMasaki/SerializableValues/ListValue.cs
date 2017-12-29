@@ -12,20 +12,20 @@ namespace SonezakiMasaki.SerializableValues
     internal sealed class ListValue : ISerializableValue
     {
         readonly Type _listType;
-        readonly TypeInstantiator _typeInstantiator;
+        readonly TypeManager _typeManager;
         readonly int _listLength;
 
-        ListValue( Type listType, TypeInstantiator typeInstantiator, int length )
+        ListValue( Type listType, TypeManager typeManager, int length )
         {
             _listType = listType;
-            _typeInstantiator = typeInstantiator;
+            _typeManager = typeManager;
             _listLength = length;
         }
 
-        public static ListValue Instantiate( TypeInstantiator typeInstantiator, Type fullType, BinaryReader reader )
+        public static ListValue Instantiate( TypeManager typeManager, Type fullType, BinaryReader reader )
         {
             int listLength = reader.ReadInt32();
-            return new ListValue( fullType, typeInstantiator, listLength );
+            return new ListValue( fullType, typeManager, listLength );
         }
 
         public object Read( BinaryReader reader, ObjectSerializer objectSerializer )
@@ -34,7 +34,7 @@ namespace SonezakiMasaki.SerializableValues
 
             for ( int index = 0; index < _listLength; ++index )
             {
-                ISerializableValue value = _typeInstantiator.Instantiate( _listType.GenericTypeArguments[0], reader );
+                ISerializableValue value = _typeManager.Instantiate( _listType.GenericTypeArguments[0], reader );
                 object deserializedValue = value.Read( reader, objectSerializer );
                 list.Add( deserializedValue );
             }

@@ -45,6 +45,10 @@
     <AdditionalFiles Include="../stylecop.json">
       <Link>stylecop.json</Link>
     </AdditionalFiles>
+    <Compile Include="IMultiKeyValue.cs" />
+    <Compile Include="MultiKeyDictionary.cs" />
+    <Compile Include="RegisteredType.cs" />
+    <Compile Include="SerializableValues\BuiltInValue.cs" />
     <Compile Include="SerializableValues\ListValue.cs" />
     <Compile Include="Exceptions\DifferentFileTypeException.cs" />
     <Compile Include="Exceptions\SonezakiMasakiException.cs" />
@@ -56,8 +60,7 @@
     <Compile Include="SerializationFile.cs" />
     <Compile Include="SerializedFieldAttribute.cs" />
     <Compile Include="Serializer.cs" />
-    <Compile Include="TypeInstantiator.cs" />
-    <Compile Include="TypeResolver.cs" />
+    <Compile Include="TypeManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

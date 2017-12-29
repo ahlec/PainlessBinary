@@ -11,12 +11,13 @@ namespace SonezakiMasaki
 {
     public sealed class Serializer
     {
+        readonly TypeManager _typeManager;
         readonly ObjectSerializer _objectSerializer;
-        readonly TypeInstantiator _typeInstantiator = new TypeInstantiator();
 
-        public Serializer( TypeResolver typeResolver )
+        public Serializer( TypeManager typeManager )
         {
-            _objectSerializer = new ObjectSerializer( typeResolver ?? throw new ArgumentNullException( nameof( typeResolver ) ) );
+            _typeManager = typeManager ?? throw new ArgumentNullException( nameof( typeManager ) );
+            _objectSerializer = new ObjectSerializer( typeManager );
         }
 
         public SerializationFile<T> DeserializeFile<T>( Stream dataStream )
@@ -39,7 +40,7 @@ namespace SonezakiMasaki
                 throw new DifferentFileTypeException( typeof( T ), fileType );
             }
 
-            ISerializableValue value = _typeInstantiator.Instantiate( fileType, reader );
+            ISerializableValue value = _typeManager.Instantiate( fileType, reader );
             object payload = value.Read( reader, _objectSerializer );
             return (T) payload;
         }
