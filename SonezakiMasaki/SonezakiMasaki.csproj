@@ -46,6 +46,8 @@
       <Link>stylecop.json</Link>
     </AdditionalFiles>
     <Compile Include="IMultiKeyValue.cs" />
+    <Compile Include="IO\ReadWriteOperations.cs" />
+    <Compile Include="IO\StandardReadWriteOperations.cs" />
     <Compile Include="MultiKeyDictionary.cs" />
     <Compile Include="RegisteredType.cs" />
     <Compile Include="SerializableValues\BuiltInValue.cs" />

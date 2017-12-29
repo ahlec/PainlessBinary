@@ -14,47 +14,46 @@ namespace BinaryExplorer
             InitializeComponent();
 
             const string Filename = @"test-data.bin";
-            CreateTestFile( Filename );
 
             TypeManager typeManager = new TypeManager();
             Serializer serializer = new Serializer( typeManager );
-            SerializationFile<List<List<int>>> file = DeserializeFile<List<List<int>>>( serializer, Filename );
 
-            List<int> today = file.Payload[0];
-            List<int> lastLeapDay = file.Payload[1];
-            List<int> favouriteNumbers = file.Payload[2];
+            CreateTestFile( serializer, Filename );
+
+            SerializationFile<List<List<int>>> file = DeserializeFile<List<List<int>>>( serializer, Filename );
 
             file.ToString();
         }
 
-        static void CreateTestFile( string filename )
+        static void CreateTestFile( Serializer serializer, string filename )
         {
             using ( Stream fileStream = File.Create( filename ) )
             {
-                using ( BinaryWriter writer = new BinaryWriter( fileStream ) )
+                serializer.SerializeFile( fileStream, new SerializationFile<List<List<int>>>
                 {
-                    writer.Write( TypeIdList );
-                    writer.Write( TypeIdList );
-                    writer.Write( TypeIdInt );
-
-                    writer.Write( 3 );
-
-                        writer.Write( 3 );
-
-                            writer.Write( 28 );
-                            writer.Write( 12 );
-                            writer.Write( 2017 );
-
-                        writer.Write( 3 );
-
-                            writer.Write( 29 );
-                            writer.Write( 2 );
-                            writer.Write( 2016 );
-
-                        writer.Write( 1 );
-
-                            writer.Write( 17 );
-                }
+                    Payload = new List<List<int>>
+                    {
+                        new List<int>
+                        {
+                            1,
+                            2,
+                            3
+                        },
+                        new List<int>
+                        {
+                            10,
+                            12,
+                            14,
+                            16,
+                            18,
+                            20
+                        },
+                        new List<int>
+                        {
+                            17
+                        }
+                    }
+                } );
             }
 
             filename.ToString();

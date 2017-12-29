@@ -20,6 +20,22 @@ namespace SonezakiMasaki
             _objectSerializer = new ObjectSerializer( typeManager );
         }
 
+        public void SerializeFile<T>( Stream dataStream, SerializationFile<T> file )
+        {
+            if ( file == null )
+            {
+                throw new ArgumentNullException( nameof( file ) );
+            }
+
+            using ( BinaryWriter writer = new BinaryWriter( dataStream ) )
+            {
+                _objectSerializer.WriteType( writer, typeof( T ) );
+
+                ISerializableValue wrappedValue = _typeManager.WrapRawValue( typeof( T ), file.Payload );
+                wrappedValue.Write( writer );
+            }
+        }
+
         public SerializationFile<T> DeserializeFile<T>( Stream dataStream )
         {
             using ( BinaryReader reader = new BinaryReader( dataStream ) )
@@ -41,8 +57,8 @@ namespace SonezakiMasaki
             }
 
             ISerializableValue value = _typeManager.Instantiate( fileType, reader );
-            object payload = value.Read( reader, _objectSerializer );
-            return (T) payload;
+            value.Read( reader, _objectSerializer );
+            return (T) value.Value;
         }
     }
 }

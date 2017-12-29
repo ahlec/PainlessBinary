@@ -4,28 +4,41 @@
 // ------------------------------------------------------------------------------------------------------------------------
 
 using System.IO;
+using SonezakiMasaki.IO;
 
 namespace SonezakiMasaki.SerializableValues
 {
-    internal sealed class BuiltInValue : ISerializableValue
+    internal sealed class BuiltInValue<T> : ISerializableValue
     {
-        readonly BinaryReaderFunction _function;
+        readonly ReadWriteOperations<T> _readWriteOperations;
+        T _value;
 
-        BuiltInValue( BinaryReaderFunction function )
+        BuiltInValue( ReadWriteOperations<T> readWriteOperations, T defaultValue )
         {
-            _function = function;
+            _readWriteOperations = readWriteOperations;
+            _value = defaultValue;
         }
 
-        internal delegate object BinaryReaderFunction( BinaryReader reader );
+        public object Value => _value;
 
-        public static ValueInstantiator CreateInstantiator( BinaryReaderFunction function )
+        public static ValueInstantiator CreateInstantiator( ReadWriteOperations<T> readWriteOperations )
         {
-            return ( typeManager, fullType, reader ) => new BuiltInValue( function );
+            return ( typeManager, fullType, reader ) => new BuiltInValue<T>( readWriteOperations, default( T ) );
         }
 
-        public object Read( BinaryReader reader, ObjectSerializer objectSerializer )
+        public static ValueWrapper CreateWrapper( ReadWriteOperations<T> readWriteOperations )
         {
-            return _function( reader );
+            return ( typeManager, value ) => new BuiltInValue<T>( readWriteOperations, (T) value );
+        }
+
+        public void Read( BinaryReader reader, ObjectSerializer objectSerializer )
+        {
+            _value = _readWriteOperations.ReadFunction( reader );
+        }
+
+        public void Write( BinaryWriter writer )
+        {
+            _readWriteOperations.WriteFunction( writer, _value );
         }
     }
 }

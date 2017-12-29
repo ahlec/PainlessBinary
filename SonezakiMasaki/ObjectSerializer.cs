@@ -22,23 +22,40 @@ namespace SonezakiMasaki
         {
             uint typeId = reader.ReadUInt32();
             Type baseType = _typeManager.ResolveType( typeId );
-            Type type = CompleteType( baseType, reader );
-            return type;
-        }
 
-        Type CompleteType( Type baseType, BinaryReader reader )
-        {
-            if ( !baseType.ContainsGenericParameters )
+            int numGenericParameters = CountNumberGenericParameters( baseType );
+            if ( numGenericParameters == 0 )
             {
                 return baseType;
             }
 
-            return ResolveGenericArguments( baseType, reader );
+            return ResolveGenericArguments( baseType, numGenericParameters, reader );
         }
 
-        Type ResolveGenericArguments( Type baseType, BinaryReader reader )
+        public void WriteType( BinaryWriter writer, Type type )
         {
-            int numGenericParameters = baseType.GetGenericArguments().Count( argument => argument.IsGenericParameter );
+            if ( type.ContainsGenericParameters )
+            {
+                throw new InvalidOperationException( "Cannot write an incomplete type. The type in question has generic parameters still." );
+            }
+
+            RegisteredType registeredType = _typeManager.GetRegisteredType( type );
+            WriteRegisteredType( writer, registeredType, type );
+        }
+
+        static int CountNumberGenericParameters( Type type )
+        {
+            if ( !type.ContainsGenericParameters )
+            {
+                return 0;
+            }
+
+            int numGenericParameters = type.GetGenericArguments().Count( argument => argument.IsGenericParameter );
+            return numGenericParameters;
+        }
+
+        Type ResolveGenericArguments( Type baseType, int numGenericParameters, BinaryReader reader )
+        {
             Type[] genericArguments = new Type[numGenericParameters];
 
             for ( int index = 0; index < numGenericParameters; ++index )
@@ -47,6 +64,23 @@ namespace SonezakiMasaki
             }
 
             return baseType.MakeGenericType( genericArguments );
+        }
+
+        void WriteRegisteredType( BinaryWriter writer, RegisteredType registeredType, Type fullType )
+        {
+            writer.Write( registeredType.Id );
+
+            int numGenericParameters = CountNumberGenericParameters( registeredType.Type );
+            if ( numGenericParameters == 0 )
+            {
+                return;
+            }
+
+            Type[] genericArguments = fullType.GetGenericArguments();
+            for ( int index = 0; index < numGenericParameters; ++index )
+            {
+                WriteType( writer, genericArguments[index] );
+            }
         }
     }
 }

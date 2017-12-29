@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using SonezakiMasaki.Exceptions;
+using SonezakiMasaki.IO;
 using SonezakiMasaki.SerializableValues;
 
 namespace SonezakiMasaki
@@ -33,7 +34,7 @@ namespace SonezakiMasaki
             return registeredType.Type;
         }
 
-        internal ISerializableValue Instantiate( Type type, BinaryReader reader )
+        internal RegisteredType GetRegisteredType( Type type )
         {
             Type baseType = type;
             if ( baseType.IsGenericType )
@@ -46,42 +47,63 @@ namespace SonezakiMasaki
                 throw new UninstantiatableTypeException( baseType, type );
             }
 
-            ISerializableValue value = registeredType.Instantiate( this, type, reader );
+            return registeredType;
+        }
+
+        internal ISerializableValue Instantiate( Type type, BinaryReader reader )
+        {
+            RegisteredType registeredType = GetRegisteredType( type );
+            ISerializableValue value = registeredType.Instantiate( type, reader );
             return value;
+        }
+
+        internal ISerializableValue WrapRawValue( Type type, object value )
+        {
+            RegisteredType registeredType = GetRegisteredType( type );
+            ISerializableValue serializableValue = registeredType.Wrap( value );
+            return serializableValue;
         }
 
         void RegisterBuiltInTypes()
         {
-            RegisterBuiltInType( typeof( bool ), BuiltInValue.CreateInstantiator( reader => reader.ReadBoolean() ) );
-            RegisterBuiltInType( typeof( byte ), BuiltInValue.CreateInstantiator( reader => reader.ReadByte() ) );
-            RegisterBuiltInType( typeof( sbyte ), BuiltInValue.CreateInstantiator( reader => reader.ReadSByte() ) );
-            RegisterBuiltInType( typeof( char ), BuiltInValue.CreateInstantiator( reader => reader.ReadChar() ) );
-            RegisterBuiltInType( typeof( decimal ), BuiltInValue.CreateInstantiator( reader => reader.ReadDecimal() ) );
-            RegisterBuiltInType( typeof( double ), BuiltInValue.CreateInstantiator( reader => reader.ReadDouble() ) );
-            RegisterBuiltInType( typeof( float ), BuiltInValue.CreateInstantiator( reader => reader.ReadSingle() ) );
-            RegisterBuiltInType( typeof( int ), BuiltInValue.CreateInstantiator( reader => reader.ReadInt32() ) );
-            RegisterBuiltInType( typeof( uint ), BuiltInValue.CreateInstantiator( reader => reader.ReadUInt32() ) );
-            RegisterBuiltInType( typeof( long ), BuiltInValue.CreateInstantiator( reader => reader.ReadInt64() ) );
-            RegisterBuiltInType( typeof( ulong ), BuiltInValue.CreateInstantiator( reader => reader.ReadUInt64() ) );
-            RegisterBuiltInType( typeof( short ), BuiltInValue.CreateInstantiator( reader => reader.ReadInt16() ) );
-            RegisterBuiltInType( typeof( ushort ), BuiltInValue.CreateInstantiator( reader => reader.ReadUInt16() ) );
-            RegisterBuiltInType( typeof( string ), BuiltInValue.CreateInstantiator( reader => reader.ReadString() ) );
-            RegisterBuiltInType( typeof( List<> ), ListValue.Instantiate );
+            RegisterBuiltInValueType( StandardReadWriteOperations.Boolean );
+            RegisterBuiltInValueType( StandardReadWriteOperations.Byte );
+            RegisterBuiltInValueType( StandardReadWriteOperations.SByte );
+            RegisterBuiltInValueType( StandardReadWriteOperations.Char );
+            RegisterBuiltInValueType( StandardReadWriteOperations.Decimal );
+            RegisterBuiltInValueType( StandardReadWriteOperations.Double );
+            RegisterBuiltInValueType( StandardReadWriteOperations.Single );
+            RegisterBuiltInValueType( StandardReadWriteOperations.Int32 );
+            RegisterBuiltInValueType( StandardReadWriteOperations.UInt32 );
+            RegisterBuiltInValueType( StandardReadWriteOperations.Int64 );
+            RegisterBuiltInValueType( StandardReadWriteOperations.UInt64 );
+            RegisterBuiltInValueType( StandardReadWriteOperations.Int16 );
+            RegisterBuiltInValueType( StandardReadWriteOperations.UInt16 );
+            RegisterBuiltInValueType( StandardReadWriteOperations.String );
+
+            RegisterBuiltInType( typeof( List<> ), ListValue.Instantiate, ListValue.WrapRawValue );
         }
 
-        void RegisterBuiltInType( Type type, ValueInstantiator instantiator )
+        void RegisterBuiltInValueType<T>( ReadWriteOperations<T> operations )
+        {
+            ValueInstantiator instantiator = BuiltInValue<T>.CreateInstantiator( operations );
+            ValueWrapper wrapper = BuiltInValue<T>.CreateWrapper( operations );
+            RegisterBuiltInType( typeof( T ), instantiator, wrapper );
+        }
+
+        void RegisterBuiltInType( Type type, ValueInstantiator instantiator, ValueWrapper wrapper )
         {
             if ( _nextBuiltInType > MaxBuiltInTypeId )
             {
                 throw new InvalidOperationException();
             }
 
-            RegisterTypeInternal( ref _nextBuiltInType, type, instantiator );
+            RegisterTypeInternal( ref _nextBuiltInType, type, instantiator, wrapper );
         }
 
-        void RegisterTypeInternal( ref uint nextIdVariable, Type type, ValueInstantiator instantiator )
+        void RegisterTypeInternal( ref uint nextIdVariable, Type type, ValueInstantiator instantiator, ValueWrapper wrapper )
         {
-            RegisteredType registeredType = new RegisteredType( nextIdVariable, type, instantiator );
+            RegisteredType registeredType = new RegisteredType( this, nextIdVariable, type, instantiator, wrapper );
             _registeredTypes.Add( registeredType );
             nextIdVariable++;
         }

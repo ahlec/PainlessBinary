@@ -10,15 +10,21 @@ namespace SonezakiMasaki
 {
     internal delegate ISerializableValue ValueInstantiator( TypeManager typeManager, Type fullType, BinaryReader reader );
 
+    internal delegate ISerializableValue ValueWrapper( TypeManager typeManager, object value );
+
     internal sealed class RegisteredType : IMultiKeyValue<uint, Type>
     {
+        readonly TypeManager _typeManager;
         readonly ValueInstantiator _instantiator;
+        readonly ValueWrapper _wrapper;
 
-        public RegisteredType( uint id, Type type, ValueInstantiator instantiator )
+        public RegisteredType( TypeManager typeManager, uint id, Type type, ValueInstantiator instantiator, ValueWrapper wrapper )
         {
+            _typeManager = typeManager;
             Id = id;
             Type = type;
             _instantiator = instantiator;
+            _wrapper = wrapper;
         }
 
         public uint Id { get; }
@@ -29,9 +35,14 @@ namespace SonezakiMasaki
 
         public Type Key2 => Type;
 
-        public ISerializableValue Instantiate( TypeManager typeManager, Type fullType, BinaryReader reader )
+        public ISerializableValue Instantiate( Type fullType, BinaryReader reader )
         {
-            return _instantiator( typeManager, fullType, reader );
+            return _instantiator( _typeManager, fullType, reader );
+        }
+
+        public ISerializableValue Wrap( object value )
+        {
+            return _wrapper( _typeManager, value );
         }
     }
 }

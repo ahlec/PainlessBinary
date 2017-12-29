@@ -11,35 +11,53 @@ namespace SonezakiMasaki.SerializableValues
 {
     internal sealed class ListValue : ISerializableValue
     {
-        readonly Type _listType;
         readonly TypeManager _typeManager;
+        readonly Type _contentType;
+        readonly IList _list;
         readonly int _listLength;
 
-        ListValue( Type listType, TypeManager typeManager, int length )
+        ListValue( TypeManager typeManager, Type listType, IList list, int listLength )
         {
-            _listType = listType;
             _typeManager = typeManager;
-            _listLength = length;
+            _contentType = listType.GenericTypeArguments[0];
+            _list = list;
+            _listLength = listLength;
         }
+
+        public object Value => _list;
 
         public static ListValue Instantiate( TypeManager typeManager, Type fullType, BinaryReader reader )
         {
             int listLength = reader.ReadInt32();
-            return new ListValue( fullType, typeManager, listLength );
+            IList list = (IList) Activator.CreateInstance( fullType, listLength );
+            return new ListValue( typeManager, fullType, list, listLength );
         }
 
-        public object Read( BinaryReader reader, ObjectSerializer objectSerializer )
+        public static ListValue WrapRawValue( TypeManager typeManager, object value )
         {
-            IList list = (IList) Activator.CreateInstance( _listType, _listLength );
+            IList list = (IList) value;
+            return new ListValue( typeManager, value.GetType(), list, list.Count );
+        }
+
+        public void Read( BinaryReader reader, ObjectSerializer objectSerializer )
+        {
+            for ( int index = 0; index < _listLength; ++index )
+            {
+                ISerializableValue itemSerializableValue = _typeManager.Instantiate( _contentType, reader );
+                itemSerializableValue.Read( reader, objectSerializer );
+                _list.Add( itemSerializableValue.Value );
+            }
+        }
+
+        public void Write( BinaryWriter writer )
+        {
+            writer.Write( _list.Count );
 
             for ( int index = 0; index < _listLength; ++index )
             {
-                ISerializableValue value = _typeManager.Instantiate( _listType.GenericTypeArguments[0], reader );
-                object deserializedValue = value.Read( reader, objectSerializer );
-                list.Add( deserializedValue );
+                ISerializableValue itemSerializableValue = _typeManager.WrapRawValue( _contentType, _list[index] );
+                itemSerializableValue.Write( writer );
             }
-
-            return list;
         }
     }
 }
