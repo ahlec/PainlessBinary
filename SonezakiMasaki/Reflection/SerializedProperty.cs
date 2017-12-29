@@ -12,7 +12,7 @@ namespace SonezakiMasaki.Reflection
         readonly PropertyInfo _propertyInfo;
 
         SerializedProperty( int order, PropertyInfo propertyInfo )
-            : base( order )
+            : base( order, propertyInfo.PropertyType )
         {
             _propertyInfo = propertyInfo;
         }
@@ -20,6 +20,11 @@ namespace SonezakiMasaki.Reflection
         public static SerializedProperty Create( PropertyInfo propertyInfo, SerializedMemberAttribute attribute )
         {
             return new SerializedProperty( attribute.Order, propertyInfo );
+        }
+
+        public override object GetValue( object item )
+        {
+            return _propertyInfo.GetValue( item );
         }
 
         public override void SetValue( object item, object value )

@@ -25,6 +25,7 @@ namespace SonezakiMasaki
         }
 
         public void RegisterType<T>()
+            where T : new()
         {
             if ( _registeredTypes.Contains( typeof( T ) ) )
             {

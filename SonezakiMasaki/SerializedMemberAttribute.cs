@@ -8,13 +8,13 @@ using System;
 namespace SonezakiMasaki
 {
     [AttributeUsage( AttributeTargets.Field | AttributeTargets.Property )]
-    internal sealed class SerializedMemberAttribute : Attribute
+    public sealed class SerializedMemberAttribute : Attribute
     {
         public SerializedMemberAttribute( int order )
         {
             Order = order;
         }
 
-        public int Order { get; set; }
+        public int Order { get; }
     }
 }

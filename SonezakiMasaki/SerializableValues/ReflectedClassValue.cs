@@ -45,9 +45,15 @@ namespace SonezakiMasaki.SerializableValues
             }
         }
 
-        public void Write( BinaryWriter writer )
+        public void Write( BinaryWriter writer, ObjectSerializer objectSerializer )
         {
-
+            foreach ( SerializedMember member in _members )
+            {
+                object rawValue = member.GetValue( Value );
+                ISerializableValue value = _typeManager.WrapRawValue( member.Type, rawValue );
+                objectSerializer.WriteType( writer, member.Type );
+                value.Write( writer, objectSerializer );
+            }
         }
     }
 }

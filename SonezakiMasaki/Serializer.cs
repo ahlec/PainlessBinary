@@ -32,7 +32,7 @@ namespace SonezakiMasaki
                 _objectSerializer.WriteType( writer, typeof( T ) );
 
                 ISerializableValue wrappedValue = _typeManager.WrapRawValue( typeof( T ), file.Payload );
-                wrappedValue.Write( writer );
+                wrappedValue.Write( writer, _objectSerializer );
             }
         }
 

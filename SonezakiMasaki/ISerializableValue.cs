@@ -13,6 +13,6 @@ namespace SonezakiMasaki
 
         void Read( BinaryReader reader, ObjectSerializer objectSerializer );
 
-        void Write( BinaryWriter writer );
+        void Write( BinaryWriter writer, ObjectSerializer objectSerializer );
     }
 }

@@ -12,7 +12,7 @@ namespace SonezakiMasaki.Reflection
         readonly FieldInfo _fieldInfo;
 
         SerializedField( int order, FieldInfo fieldInfo )
-            : base( order )
+            : base( order, fieldInfo.FieldType )
         {
             _fieldInfo = fieldInfo;
         }
@@ -20,6 +20,11 @@ namespace SonezakiMasaki.Reflection
         public static SerializedField Create( FieldInfo fieldInfo, SerializedMemberAttribute attribute )
         {
             return new SerializedField( attribute.Order, fieldInfo );
+        }
+
+        public override object GetValue( object item )
+        {
+            return _fieldInfo.GetValue( item );
         }
 
         public override void SetValue( object item, object value )

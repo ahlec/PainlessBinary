@@ -11,15 +11,18 @@ namespace SonezakiMasaki.Reflection
 {
     internal abstract class SerializedMember : IComparable<SerializedMember>
     {
-        protected SerializedMember( int order )
+        protected SerializedMember( int order, Type type )
         {
             Order = order;
+            Type = type;
         }
 
         delegate SerializedMember MemberConstructor<in TReflectionInfo>( TReflectionInfo memberInfo, SerializedMemberAttribute attribute )
             where TReflectionInfo : MemberInfo;
 
         public int Order { get; }
+
+        public Type Type { get; }
 
         public static IReadOnlyList<SerializedMember> GetOrderedSerializedMembers( Type type )
         {
@@ -37,6 +40,8 @@ namespace SonezakiMasaki.Reflection
         {
             return Order.CompareTo( other.Order );
         }
+
+        public abstract object GetValue( object item );
 
         public abstract void SetValue( object item, object value );
 

@@ -36,7 +36,7 @@ namespace SonezakiMasaki.SerializableValues
             _value = _readWriteOperations.ReadFunction( reader );
         }
 
-        public void Write( BinaryWriter writer )
+        public void Write( BinaryWriter writer, ObjectSerializer objectSerializer )
         {
             _readWriteOperations.WriteFunction( writer, _value );
         }

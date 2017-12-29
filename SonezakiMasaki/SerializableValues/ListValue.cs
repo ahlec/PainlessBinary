@@ -49,14 +49,14 @@ namespace SonezakiMasaki.SerializableValues
             }
         }
 
-        public void Write( BinaryWriter writer )
+        public void Write( BinaryWriter writer, ObjectSerializer objectSerializer )
         {
             writer.Write( _list.Count );
 
             for ( int index = 0; index < _listLength; ++index )
             {
                 ISerializableValue itemSerializableValue = _typeManager.WrapRawValue( _contentType, _list[index] );
-                itemSerializableValue.Write( writer );
+                itemSerializableValue.Write( writer, objectSerializer );
             }
         }
     }
