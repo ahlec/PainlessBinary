@@ -3,20 +3,24 @@
 // This library is available to the public under the MIT license.
 // ------------------------------------------------------------------------------------------------------------------------
 
+using System;
 using System.IO;
+using SonezakiMasaki.TypeSignatures;
 
 namespace SonezakiMasaki.IO
 {
     internal sealed class SonezakiReader : BinaryReader
     {
         readonly SonezakiStreamWrapper _sonezakiStreamWrapper;
+        readonly TypeManager _typeManager;
         readonly int _hashSeed;
         readonly int _hashMultiplicationConstant;
 
-        public SonezakiReader( SonezakiStreamWrapper dataStream, int hashSeed, int hashMultiplicationConstant )
+        public SonezakiReader( SonezakiStreamWrapper dataStream, TypeManager typeManager, int hashSeed, int hashMultiplicationConstant )
             : base( dataStream )
         {
             _sonezakiStreamWrapper = dataStream;
+            _typeManager = typeManager;
             _hashSeed = hashSeed;
             _hashMultiplicationConstant = hashMultiplicationConstant;
         }
@@ -31,6 +35,13 @@ namespace SonezakiMasaki.IO
         {
             CompoundingHash hash = _sonezakiStreamWrapper.PopCompoundingHash();
             return hash.HashValue;
+        }
+
+        public Type ReadNextType()
+        {
+            uint typeId = ReadUInt32();
+            ITypeSignature typeSignature = _typeManager.ResolveTypeSignature( typeId );
+            return typeSignature.Read( this );
         }
     }
 }

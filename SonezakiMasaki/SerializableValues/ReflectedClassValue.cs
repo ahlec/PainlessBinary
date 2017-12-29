@@ -35,15 +35,15 @@ namespace SonezakiMasaki.SerializableValues
             return new ReflectedClassValue<T>( typeManager, value );
         }
 
-        public void Read( SonezakiReader reader, ObjectSerializer objectSerializer )
+        public void Read( SonezakiReader reader )
         {
             reader.PushCompoundingHash();
 
             foreach ( SerializedMember member in _members )
             {
-                Type memberType = objectSerializer.ReadNextType( reader );
+                Type memberType = reader.ReadNextType();
                 ISerializableValue serializableValue = _typeManager.Instantiate( memberType, reader );
-                serializableValue.Read( reader, objectSerializer );
+                serializableValue.Read( reader );
                 member.SetValue( Value, serializableValue.Value );
             }
 
@@ -55,7 +55,7 @@ namespace SonezakiMasaki.SerializableValues
             }
         }
 
-        public void Write( SonezakiWriter writer, ObjectSerializer objectSerializer )
+        public void Write( SonezakiWriter writer )
         {
             writer.PushCompoundingHash();
 
@@ -63,8 +63,8 @@ namespace SonezakiMasaki.SerializableValues
             {
                 object rawValue = member.GetValue( Value );
                 ISerializableValue value = _typeManager.WrapRawValue( member.Type, rawValue );
-                objectSerializer.WriteType( writer, member.Type );
-                value.Write( writer, objectSerializer );
+                writer.WriteType( member.Type );
+                value.Write( writer );
             }
 
             int computedHash = writer.PopCompoundingHash();

@@ -30,12 +30,12 @@ namespace SonezakiMasaki.SerializableValues
             return ( typeManager, value ) => new BuiltInValue<T>( readWriteOperations, (T) value );
         }
 
-        public void Read( SonezakiReader reader, ObjectSerializer objectSerializer )
+        public void Read( SonezakiReader reader )
         {
             _value = _readWriteOperations.ReadFunction( reader );
         }
 
-        public void Write( SonezakiWriter writer, ObjectSerializer objectSerializer )
+        public void Write( SonezakiWriter writer )
         {
             _readWriteOperations.WriteFunction( writer, _value );
         }

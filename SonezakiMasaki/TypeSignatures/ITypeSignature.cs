@@ -3,16 +3,15 @@
 // This library is available to the public under the MIT license.
 // ------------------------------------------------------------------------------------------------------------------------
 
+using System;
 using SonezakiMasaki.IO;
 
-namespace SonezakiMasaki
+namespace SonezakiMasaki.TypeSignatures
 {
-    internal interface ISerializableValue
+    internal interface ITypeSignature
     {
-        object Value { get; }
+        Type Read( SonezakiReader reader );
 
-        void Read( SonezakiReader reader );
-
-        void Write( SonezakiWriter writer );
+        void Write( SonezakiWriter writer, Type fullType );
     }
 }

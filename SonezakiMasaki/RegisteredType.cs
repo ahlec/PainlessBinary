@@ -4,28 +4,26 @@
 // ------------------------------------------------------------------------------------------------------------------------
 
 using System;
-using System.IO;
 using SonezakiMasaki.IO;
+using SonezakiMasaki.TypeSignatures;
 
 namespace SonezakiMasaki
 {
+    internal delegate ITypeSignature TypeSignatureCreator( uint id, Type baseType );
+
     internal delegate ISerializableValue ValueInstantiator( TypeManager typeManager, Type fullType, SonezakiReader reader );
 
     internal delegate ISerializableValue ValueWrapper( TypeManager typeManager, object value );
 
     internal sealed class RegisteredType : IMultiKeyValue<uint, Type>
     {
-        readonly TypeManager _typeManager;
-        readonly ValueInstantiator _instantiator;
-        readonly ValueWrapper _wrapper;
-
-        public RegisteredType( TypeManager typeManager, uint id, Type type, ValueInstantiator instantiator, ValueWrapper wrapper )
+        public RegisteredType( uint id, Type type, TypeSignatureCreator signatureCreator, ValueInstantiator instantiator, ValueWrapper wrapper )
         {
-            _typeManager = typeManager;
             Id = id;
             Type = type;
-            _instantiator = instantiator;
-            _wrapper = wrapper;
+            TypeSignature = signatureCreator( id, type );
+            Instantiator = instantiator;
+            Wrapper = wrapper;
         }
 
         public uint Id { get; }
@@ -36,14 +34,10 @@ namespace SonezakiMasaki
 
         public Type Key2 => Type;
 
-        public ISerializableValue Instantiate( Type fullType, SonezakiReader reader )
-        {
-            return _instantiator( _typeManager, fullType, reader );
-        }
+        public ITypeSignature TypeSignature { get; }
 
-        public ISerializableValue Wrap( object value )
-        {
-            return _wrapper( _typeManager, value );
-        }
+        public ValueInstantiator Instantiator { get; }
+
+        public ValueWrapper Wrapper { get; }
     }
 }

@@ -39,24 +39,24 @@ namespace SonezakiMasaki.SerializableValues
             return new ListValue( typeManager, value.GetType(), list, list.Count );
         }
 
-        public void Read( SonezakiReader reader, ObjectSerializer objectSerializer )
+        public void Read( SonezakiReader reader )
         {
             for ( int index = 0; index < _listLength; ++index )
             {
                 ISerializableValue itemSerializableValue = _typeManager.Instantiate( _contentType, reader );
-                itemSerializableValue.Read( reader, objectSerializer );
+                itemSerializableValue.Read( reader );
                 _list.Add( itemSerializableValue.Value );
             }
         }
 
-        public void Write( SonezakiWriter writer, ObjectSerializer objectSerializer )
+        public void Write( SonezakiWriter writer )
         {
             writer.Write( _list.Count );
 
             for ( int index = 0; index < _listLength; ++index )
             {
                 ISerializableValue itemSerializableValue = _typeManager.WrapRawValue( _contentType, _list[index] );
-                itemSerializableValue.Write( writer, objectSerializer );
+                itemSerializableValue.Write( writer );
             }
         }
     }
