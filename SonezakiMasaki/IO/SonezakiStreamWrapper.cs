@@ -12,8 +12,7 @@ namespace SonezakiMasaki.IO
     internal sealed class SonezakiStreamWrapper : Stream
     {
         readonly Stack<CompoundingHash> _compoundingHashes = new Stack<CompoundingHash>();
-        Stream _stream;
-        bool _isDisposed;
+        readonly Stream _stream;
 
         public SonezakiStreamWrapper( Stream stream )
         {
@@ -116,40 +115,6 @@ namespace SonezakiMasaki.IO
             {
                 hash.AddByte( value );
             }
-        }
-
-        protected override void Dispose( bool disposing )
-        {
-            if ( _isDisposed )
-            {
-                return;
-            }
-
-            _isDisposed = true;
-
-            try
-            {
-                DisposeStreamWrapper( disposing );
-            }
-            finally
-            {
-                base.Dispose( disposing );
-            }
-        }
-
-        void DisposeStreamWrapper( bool disposing )
-        {
-            if ( disposing )
-            {
-                // Managed resources
-                if ( _stream != null )
-                {
-                    _stream.Dispose();
-                    _stream = null;
-                }
-            }
-
-            // Unmanaged resources
         }
     }
 }
