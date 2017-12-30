@@ -78,7 +78,14 @@ namespace SonezakiMasaki.IO
 
         public override int ReadByte()
         {
-            return _stream.ReadByte();
+            int singleByte = _stream.ReadByte();
+
+            foreach ( CompoundingHash hash in _compoundingHashes )
+            {
+                hash.AddByte( (byte) singleByte );
+            }
+
+            return singleByte;
         }
 
         public override long Seek( long offset, SeekOrigin origin )
@@ -104,6 +111,11 @@ namespace SonezakiMasaki.IO
         public override void WriteByte( byte value )
         {
             _stream.WriteByte( value );
+
+            foreach ( CompoundingHash hash in _compoundingHashes )
+            {
+                hash.AddByte( value );
+            }
         }
 
         protected override void Dispose( bool disposing )

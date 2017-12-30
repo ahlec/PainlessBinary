@@ -35,10 +35,10 @@ namespace SonezakiMasaki.SerializableValues
             return new ArrayValue( typeManager, fullType, array, arrayLength );
         }
 
-        public static ArrayValue WrapRawValue( TypeManager typeManager, object value )
+        public static ArrayValue WrapRawValue( TypeManager typeManager, Type fullType, object value )
         {
             IList array = (IList) value;
-            return new ArrayValue( typeManager, value.GetType(), array, array.Count );
+            return new ArrayValue( typeManager, fullType, array, array.Count );
         }
 
         public void Read( SonezakiReader reader )

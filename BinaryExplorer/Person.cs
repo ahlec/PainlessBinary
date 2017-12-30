@@ -18,5 +18,11 @@ namespace BinaryExplorer
 
         [SerializedMember( 5 )]
         public string[] OtherNames { get; set; }
+
+        [SerializedMember( 6 )]
+        public bool IsHappy { get; set; }
+
+        [SerializedMember( 7 )]
+        public Pronoun? Pronoun { get; set; }
     }
 }

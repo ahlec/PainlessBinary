@@ -13,14 +13,13 @@ namespace BinaryExplorer
 
             const string Filename = @"test-data.bin";
 
-            Type r1 = typeof( string[] );
-            Type r2 = typeof( string[,] );
-            Type r3 = typeof( string[][] );
+            Type r1 = typeof( Pronoun? );
 
             TypeManager typeManager = new TypeManager();
             typeManager.RegisterType<Person>();
             typeManager.RegisterType<Date>();
             typeManager.RegisterType<Month>();
+            typeManager.RegisterType<Pronoun>();
 
             Serializer serializer = new Serializer( typeManager );
 
@@ -55,7 +54,9 @@ namespace BinaryExplorer
                                 "Jackie",
                                 "Jackson",
                                 "Jokul"
-                            }
+                            },
+                            IsHappy = true,
+                            Pronoun = Pronoun.He
                         },
                         new Person
                         {
@@ -71,6 +72,26 @@ namespace BinaryExplorer
                             OtherNames = new[]
                             {
                                 "Jacob"
+                            },
+                            IsHappy = true,
+                            Pronoun = Pronoun.He
+                        },
+                        new Person
+                        {
+                            FirstName = "Katie",
+                            LastName = "Holt",
+                            Age = 15,
+                            Birthday = new Date
+                            {
+                                Day = 10,
+                                Month = Month.February,
+                                Year = 2000
+                            },
+                            IsHappy = false,
+                            OtherNames = new[]
+                            {
+                                "Pidge",
+                                "Pidge Gunderson"
                             }
                         }
                     }

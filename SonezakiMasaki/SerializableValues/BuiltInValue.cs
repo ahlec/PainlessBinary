@@ -27,7 +27,7 @@ namespace SonezakiMasaki.SerializableValues
 
         public static ValueWrapper CreateWrapper( ReadWriteOperations<T> readWriteOperations )
         {
-            return ( typeManager, value ) => new BuiltInValue<T>( readWriteOperations, (T) value );
+            return ( typeManager, fullType, value ) => new BuiltInValue<T>( readWriteOperations, (T) value );
         }
 
         public void Read( SonezakiReader reader )

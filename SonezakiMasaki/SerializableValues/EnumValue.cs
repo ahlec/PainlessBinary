@@ -59,7 +59,7 @@ namespace SonezakiMasaki.SerializableValues
 
         public static ValueWrapper CreateWrapper( Type enumType )
         {
-            return ( typeManager, value ) => new EnumValue( enumType, value );
+            return ( typeManager, fullType, value ) => new EnumValue( enumType, value );
         }
 
         public void Read( SonezakiReader reader )

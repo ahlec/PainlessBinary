@@ -13,7 +13,7 @@ namespace SonezakiMasaki
 
     internal delegate ISerializableValue ValueInstantiator( TypeManager typeManager, Type fullType, SonezakiReader reader );
 
-    internal delegate ISerializableValue ValueWrapper( TypeManager typeManager, object value );
+    internal delegate ISerializableValue ValueWrapper( TypeManager typeManager, Type fullType, object value );
 
     internal sealed class RegisteredType : IMultiKeyValue<uint, Type>
     {

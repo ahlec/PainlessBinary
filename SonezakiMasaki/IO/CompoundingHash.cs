@@ -21,9 +21,14 @@ namespace SonezakiMasaki.IO
         {
             for ( int index = 0; index < numBytes; ++index )
             {
-                HashValue *= _multiplicationConstant;
-                HashValue += buffer[index];
+                AddByte( buffer[index] );
             }
+        }
+
+        public void AddByte( byte singleByte )
+        {
+            HashValue *= _multiplicationConstant;
+            HashValue += singleByte;
         }
     }
 }

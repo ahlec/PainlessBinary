@@ -69,7 +69,7 @@ namespace SonezakiMasaki
         internal ISerializableValue WrapRawValue( Type type, object value )
         {
             RegisteredType registeredType = GetRegisteredType( type );
-            ISerializableValue serializableValue = registeredType.Wrapper( this, value );
+            ISerializableValue serializableValue = registeredType.Wrapper( this, type, value );
             return serializableValue;
         }
 
@@ -141,6 +141,7 @@ namespace SonezakiMasaki
             RegisterBuiltInValueType( StandardReadWriteOperations.String );
 
             RegisterBuiltInType( typeof( List<> ), StandardTypeSignature.Create, ListValue.Instantiate, ListValue.WrapRawValue );
+            RegisterBuiltInType( typeof( Nullable<> ), StandardTypeSignature.Create, NullableValue.Instantiate, NullableValue.WrapRawValue );
         }
 
         void RegisterSpecialTypes()

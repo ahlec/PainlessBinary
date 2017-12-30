@@ -68,6 +68,7 @@
     <Compile Include="ISerializableValue.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SerializableValues\ArrayValue.cs" />
+    <Compile Include="SerializableValues\NullableValue.cs" />
     <Compile Include="SerializableValues\ReflectedClassValue.cs" />
     <Compile Include="SerializationFile.cs" />
     <Compile Include="SerializedMemberAttribute.cs" />

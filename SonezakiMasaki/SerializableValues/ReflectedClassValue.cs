@@ -30,7 +30,7 @@ namespace SonezakiMasaki.SerializableValues
             return new ReflectedClassValue<T>( typeManager, value );
         }
 
-        public static ReflectedClassValue<T> WrapRawValue( TypeManager typeManager, object value )
+        public static ReflectedClassValue<T> WrapRawValue( TypeManager typeManager, Type fullType, object value )
         {
             return new ReflectedClassValue<T>( typeManager, value );
         }
