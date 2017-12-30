@@ -59,6 +59,7 @@
     <Compile Include="Reflection\SerializedProperty.cs" />
     <Compile Include="RegisteredType.cs" />
     <Compile Include="SerializableValues\BuiltInValue.cs" />
+    <Compile Include="SerializableValues\EnumValue.cs" />
     <Compile Include="SerializableValues\ListValue.cs" />
     <Compile Include="Exceptions\DifferentFileTypeException.cs" />
     <Compile Include="Exceptions\SonezakiMasakiException.cs" />

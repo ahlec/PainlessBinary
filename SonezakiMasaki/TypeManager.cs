@@ -39,7 +39,8 @@ namespace SonezakiMasaki
                 throw new InvalidOperationException( $"The type {typeof( T )} is a specially registered type that you don't need to register yourself." );
             }
 
-            RegisterTypeInternal( ref _nextProprietaryType, typeof( T ), StandardTypeSignature.Create, ReflectedClassValue<T>.Instantiate, ReflectedClassValue<T>.WrapRawValue );
+            GetInstantiatorAndWrapper<T>( out ValueInstantiator instantiator, out ValueWrapper wrapper );
+            RegisterTypeInternal( ref _nextProprietaryType, typeof( T ), StandardTypeSignature.Create, instantiator, wrapper );
         }
 
         internal ITypeSignature ResolveTypeSignature( uint typeId )
@@ -75,6 +76,19 @@ namespace SonezakiMasaki
         static bool IsSpecialRegisteredType( Type baseType )
         {
             return baseType.IsArray;
+        }
+
+        static void GetInstantiatorAndWrapper<T>( out ValueInstantiator instantiator, out ValueWrapper wrapper )
+        {
+            if ( typeof( T ).IsEnum )
+            {
+                instantiator = EnumValue.CreateInstantiator( typeof( T ) );
+                wrapper = EnumValue.CreateWrapper( typeof( T ) );
+                return;
+            }
+
+            instantiator = ReflectedClassValue<T>.Instantiate;
+            wrapper = ReflectedClassValue<T>.WrapRawValue;
         }
 
         RegisteredType GetRegisteredType( Type type )
