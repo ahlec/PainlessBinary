@@ -33,6 +33,31 @@ namespace SonezakiMasaki.IO
 
         public static ReadWriteOperations<ushort> UInt16 { get; } = new ReadWriteOperations<ushort>( reader => reader.ReadUInt16(), ( writer, value ) => writer.Write( value ) );
 
-        public static ReadWriteOperations<string> String { get; } = new ReadWriteOperations<string>( reader => reader.ReadString(), ( writer, value ) => writer.Write( value ) );
+        public static ReadWriteOperations<string> String { get; } = new ReadWriteOperations<string>( ReadNullableString, WriteNullableString );
+
+        static string ReadNullableString( SonezakiReader reader )
+        {
+            bool hasValue = reader.ReadBoolean();
+
+            if ( !hasValue )
+            {
+                return null;
+            }
+
+            return reader.ReadString();
+        }
+
+        static void WriteNullableString( SonezakiWriter writer, string value )
+        {
+            bool hasValue = ( value != null );
+            writer.Write( hasValue );
+
+            if ( !hasValue )
+            {
+                return;
+            }
+
+            writer.Write( value );
+        }
     }
 }

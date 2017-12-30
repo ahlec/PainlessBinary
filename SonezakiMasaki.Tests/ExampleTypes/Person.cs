@@ -1,6 +1,9 @@
-﻿using SonezakiMasaki;
+﻿// ------------------------------------------------------------------------------------------------------------------------
+// SonezakiMasaki library project (https://github.com/ahlec/SonezakiMasaki/), a subproject of the Pokémon Kristall project.
+// This library is available to the public under the MIT license.
+// ------------------------------------------------------------------------------------------------------------------------
 
-namespace BinaryExplorer
+namespace SonezakiMasaki.Tests.ExampleTypes
 {
     public sealed class Person
     {
