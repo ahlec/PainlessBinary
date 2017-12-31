@@ -53,6 +53,7 @@
     <Compile Include="ExampleTypes\Person.cs" />
     <Compile Include="ExampleTypes\Pronoun.cs" />
     <Compile Include="Lists.Tests.cs" />
+    <Compile Include="Nullable.Tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SonezakiUnitTestBase.cs" />
   </ItemGroup>

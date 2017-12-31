@@ -56,6 +56,83 @@ namespace SonezakiMasaki.Tests
             Assert.That( deserialized[2], Is.EqualTo( ItemValue2 ) );
         }
 
+        [Test]
+        public void NestedLists_CanBeNull()
+        {
+            List<List<int>> deserialized = SerializeDeserializeList<List<int>>( null );
+            Assert.That( deserialized, Is.Null );
+        }
+
+        [Test]
+        public void NestedLists_CanBeEmpty()
+        {
+            List<List<int>> deserialized = SerializeDeserializeList( new List<List<int>>() );
+            Assert.That( deserialized, Is.Empty );
+
+            deserialized = SerializeDeserializeList( new List<List<int>>
+            {
+                new List<int>()
+            } );
+            Assert.That( deserialized.Count, Is.EqualTo( 1 ) );
+            Assert.That( deserialized[0], Is.Empty );
+        }
+
+        [Test]
+        public void NestedLists_MixedNestedNullAndNotNull()
+        {
+            List<List<int>> deserialized = SerializeDeserializeList( new List<List<int>>
+            {
+                new List<int>(),
+                null,
+                new List<int>()
+            } );
+            Assert.That( deserialized.Count, Is.EqualTo( 3 ) );
+            Assert.That( deserialized[0], Is.Not.Null );
+            Assert.That( deserialized[1], Is.Null );
+            Assert.That( deserialized[2], Is.Not.Null );
+        }
+
+        [Test]
+        public void NestedLists_WithOneItem()
+        {
+            const int ItemValue = 17;
+            List<List<int>> deserialized = SerializeDeserializeList( new List<List<int>>
+            {
+                new List<int>
+                {
+                    ItemValue
+                }
+            } );
+            Assert.That( deserialized.Count, Is.EqualTo( 1 ) );
+            Assert.That( deserialized[0].Count, Is.EqualTo( 1 ) );
+            Assert.That( deserialized[0][0], Is.EqualTo( ItemValue ) );
+        }
+
+        [Test]
+        public void NestedLists_WithMultipleItems()
+        {
+            const int ItemValue00 = 1;
+            const int ItemValue01 = 22;
+            const int ItemValue10 = 333;
+            List<List<int>> deserialized = SerializeDeserializeList( new List<List<int>>
+            {
+                new List<int>
+                {
+                    ItemValue00,
+                    ItemValue01
+                },
+                new List<int>
+                {
+                    ItemValue10
+                }
+            } );
+            Assert.That( deserialized.Count, Is.EqualTo( 2 ) );
+            Assert.That( deserialized[0].Count, Is.EqualTo( 2 ) );
+            Assert.That( deserialized[0][0], Is.EqualTo( ItemValue00 ) );
+            Assert.That( deserialized[0][1], Is.EqualTo( ItemValue01 ) );
+            Assert.That( deserialized[1][0], Is.EqualTo( ItemValue10 ) );
+        }
+
         static List<T> SerializeDeserializeList<T>( List<T> list )
         {
             Serializer serializer = CreateSerializer();
