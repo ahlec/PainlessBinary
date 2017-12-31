@@ -11,6 +11,7 @@ namespace SonezakiMasaki.SerializableValues
 {
     internal sealed class ArrayValue : ISerializableValue
     {
+        const int ArrayNullLengthValue = -1;
         readonly TypeManager _typeManager;
         readonly Type _elementType;
         readonly int _rank;
@@ -31,12 +32,27 @@ namespace SonezakiMasaki.SerializableValues
         public static ArrayValue Instantiate( TypeManager typeManager, Type fullType, SonezakiReader reader )
         {
             int arrayLength = reader.ReadInt32();
-            IList array = (IList) Activator.CreateInstance( fullType, arrayLength );
+
+            IList array;
+            if ( arrayLength != ArrayNullLengthValue )
+            {
+                array = (IList) Activator.CreateInstance( fullType, arrayLength );
+            }
+            else
+            {
+                array = null;
+            }
+
             return new ArrayValue( typeManager, fullType, array, arrayLength );
         }
 
         public static ArrayValue WrapRawValue( TypeManager typeManager, Type fullType, object value )
         {
+            if ( value == null )
+            {
+                return new ArrayValue( typeManager, fullType, null, ArrayNullLengthValue );
+            }
+
             IList array = (IList) value;
             return new ArrayValue( typeManager, fullType, array, array.Count );
         }

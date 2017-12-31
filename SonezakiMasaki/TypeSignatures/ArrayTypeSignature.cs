@@ -27,6 +27,11 @@ namespace SonezakiMasaki.TypeSignatures
             Type elementType = reader.ReadNextType();
             int rank = reader.ReadInt32();
 
+            if ( rank == 1 )
+            {
+                return elementType.MakeArrayType();
+            }
+
             return elementType.MakeArrayType( rank );
         }
 

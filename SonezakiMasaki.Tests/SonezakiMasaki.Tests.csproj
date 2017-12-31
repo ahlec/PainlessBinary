@@ -47,6 +47,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Arrays.Tests.cs" />
     <Compile Include="BuiltInTypes.Tests.cs" />
     <Compile Include="ExampleTypes\Date.cs" />
     <Compile Include="ExampleTypes\Month.cs" />

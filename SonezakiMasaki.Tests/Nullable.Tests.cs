@@ -6,6 +6,7 @@
 using System.IO;
 using NUnit.Framework;
 using SonezakiMasaki.Exceptions;
+using SonezakiMasaki.Tests.ExampleTypes;
 
 namespace SonezakiMasaki.Tests
 {
@@ -48,6 +49,22 @@ namespace SonezakiMasaki.Tests
             int? deserialized = SerializeDeserializeNullableValue<int>( IntValue );
             Assert.That( deserialized, Is.Not.Null );
             Assert.That( deserialized, Is.EqualTo( IntValue ) );
+        }
+
+        [Test]
+        public void Nullable_MonthIsNull()
+        {
+            Month? deserialized = SerializeDeserializeNullableValue<Month>( null );
+            Assert.That( deserialized, Is.Null );
+        }
+
+        [Test]
+        public void Nullable_MonthWithValue()
+        {
+            const Month MonthValue = Month.April;
+            Month? deserialized = SerializeDeserializeNullableValue<Month>( MonthValue );
+            Assert.That( deserialized, Is.Not.Null );
+            Assert.That( deserialized, Is.EqualTo( MonthValue ) );
         }
 
         static T? SerializeDeserializeNullableValue<T>( T? value )
