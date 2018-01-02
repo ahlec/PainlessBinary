@@ -73,6 +73,7 @@
     <Compile Include="SerializationFile.cs" />
     <Compile Include="SerializedMemberAttribute.cs" />
     <Compile Include="Serializer.cs" />
+    <Compile Include="TypeRegistry.cs" />
     <Compile Include="TypeSignatures\ArrayTypeSignature.cs" />
     <Compile Include="TypeSignatures\ITypeSignature.cs" />
     <Compile Include="TypeSignatures\StandardTypeSignature.cs" />

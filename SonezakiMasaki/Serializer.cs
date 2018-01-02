@@ -14,9 +14,14 @@ namespace SonezakiMasaki
     {
         readonly TypeManager _typeManager;
 
-        public Serializer( TypeManager typeManager )
+        public Serializer( TypeRegistry typeRegistry )
         {
-            _typeManager = typeManager ?? throw new ArgumentNullException( nameof( typeManager ) );
+            if ( typeRegistry == null )
+            {
+                throw new ArgumentNullException( nameof( typeRegistry ) );
+            }
+
+            _typeManager = new TypeManager( typeRegistry );
         }
 
         public int HashBaseValue { get; set; } = 31;

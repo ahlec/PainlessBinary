@@ -11,19 +11,19 @@ namespace SonezakiMasaki.Tests
     {
         protected static Serializer CreateSerializer()
         {
-            TypeManager typeManager = CreateTypeManager();
-            Serializer serializer = new Serializer( typeManager );
+            TypeRegistry typeRegistry = CreateTypeRegistry();
+            Serializer serializer = new Serializer( typeRegistry );
             return serializer;
         }
 
-        static TypeManager CreateTypeManager()
+        static TypeRegistry CreateTypeRegistry()
         {
-            TypeManager typeManager = new TypeManager();
-            typeManager.RegisterType<Person>();
-            typeManager.RegisterType<Date>();
-            typeManager.RegisterType<Month>();
-            typeManager.RegisterType<Pronoun>();
-            return typeManager;
+            TypeRegistry typeRegistry = new TypeRegistry();
+            typeRegistry.RegisterType( typeof( Person ) );
+            typeRegistry.RegisterType( typeof( Date ) );
+            typeRegistry.RegisterType( typeof( Month ) );
+            typeRegistry.RegisterType( typeof( Pronoun ) );
+            return typeRegistry;
         }
     }
 }

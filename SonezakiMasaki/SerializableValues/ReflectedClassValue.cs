@@ -11,28 +11,29 @@ using SonezakiMasaki.Reflection;
 
 namespace SonezakiMasaki.SerializableValues
 {
-    internal sealed class ReflectedClassValue<T> : ISerializableValue
+    internal sealed class ReflectedClassValue : ISerializableValue
     {
-        static readonly IReadOnlyList<SerializedMember> _members = SerializedMember.GetOrderedSerializedMembers( typeof( T ) );
+        readonly IReadOnlyList<SerializedMember> _members;
         readonly TypeManager _typeManager;
 
-        ReflectedClassValue( TypeManager typeManager, object value )
+        ReflectedClassValue( Type type, TypeManager typeManager, object value )
         {
+            _members = SerializedMember.GetOrderedSerializedMembers( type );
             _typeManager = typeManager;
             Value = value;
         }
 
         public object Value { get; }
 
-        public static ReflectedClassValue<T> Instantiate( TypeManager typeManager, Type fullType, SonezakiReader reader )
+        public static ReflectedClassValue Instantiate( TypeManager typeManager, Type fullType, SonezakiReader reader )
         {
-            object value = Activator.CreateInstance( typeof( T ) );
-            return new ReflectedClassValue<T>( typeManager, value );
+            object value = Activator.CreateInstance( fullType );
+            return new ReflectedClassValue( fullType, typeManager, value );
         }
 
-        public static ReflectedClassValue<T> WrapRawValue( TypeManager typeManager, Type fullType, object value )
+        public static ReflectedClassValue WrapRawValue( TypeManager typeManager, Type fullType, object value )
         {
-            return new ReflectedClassValue<T>( typeManager, value );
+            return new ReflectedClassValue( fullType, typeManager, value );
         }
 
         public void Read( SonezakiReader reader )
