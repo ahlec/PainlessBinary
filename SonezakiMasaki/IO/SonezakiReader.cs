@@ -43,5 +43,33 @@ namespace SonezakiMasaki.IO
             ITypeSignature typeSignature = _typeManager.ResolveTypeSignature( typeId );
             return typeSignature.Read( this );
         }
+
+        public object ReadSonezakiObject( Type expectedType )
+        {
+            SerializationType serializationType = (SerializationType) ReadByte();
+            switch ( serializationType )
+            {
+                case SerializationType.Null:
+                    return null;
+                case SerializationType.RegularValue:
+                    return ReadRegularValue( expectedType );
+                case SerializationType.Reference:
+                    return ReadReference();
+                default:
+                    throw new NotSupportedException();
+            }
+        }
+
+        object ReadRegularValue( Type expectedType )
+        {
+            ISerializableValue itemSerializableValue = _typeManager.Instantiate( expectedType, this );
+            itemSerializableValue.Read( this );
+            return itemSerializableValue.Value;
+        }
+
+        object ReadReference()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

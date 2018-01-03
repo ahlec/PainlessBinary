@@ -4,6 +4,8 @@
 // ------------------------------------------------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
+using System.Reflection;
 using SonezakiMasaki.Exceptions;
 using SonezakiMasaki.IO;
 using SonezakiMasaki.TypeSignatures;
@@ -12,6 +14,7 @@ namespace SonezakiMasaki
 {
     internal sealed class TypeManager
     {
+        static readonly IDictionary<Type, bool> _isTypeSerializedAsReference = new Dictionary<Type, bool>();
         readonly TypeRegistry _registry;
 
         public TypeManager( TypeRegistry registry )
@@ -19,7 +22,7 @@ namespace SonezakiMasaki
             _registry = registry;
         }
 
-        internal ITypeSignature ResolveTypeSignature( uint typeId )
+        public ITypeSignature ResolveTypeSignature( uint typeId )
         {
             if ( !_registry.TryGetRegisteredType( typeId, out RegisteredType registeredType ) )
             {
@@ -29,10 +32,22 @@ namespace SonezakiMasaki
             return registeredType.TypeSignature;
         }
 
-        internal ITypeSignature ResolveTypeSignature( Type type )
+        public ITypeSignature ResolveTypeSignature( Type type )
         {
             RegisteredType registeredType = GetRegisteredType( type );
             return registeredType.TypeSignature;
+        }
+
+        public bool DetermineIsTypeSerializedAsReference( Type type )
+        {
+            if ( _isTypeSerializedAsReference.TryGetValue( type, out bool isSerializedAsReference ) )
+            {
+                return isSerializedAsReference;
+            }
+
+            isSerializedAsReference = ( type.GetCustomAttribute<BinarySerializedAsReferenceAttribute>() != null );
+            _isTypeSerializedAsReference[type] = isSerializedAsReference;
+            return isSerializedAsReference;
         }
 
         internal ISerializableValue Instantiate( Type type, SonezakiReader reader )

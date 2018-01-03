@@ -47,9 +47,7 @@ namespace SonezakiMasaki.SerializableValues
                 return;
             }
 
-            ISerializableValue serializableValue = _typeManager.Instantiate( _contentType, reader );
-            serializableValue.Read( reader );
-            Value = serializableValue.Value;
+            Value = reader.ReadSonezakiObject( _contentType );
         }
 
         public void Write( SonezakiWriter writer )
@@ -63,8 +61,7 @@ namespace SonezakiMasaki.SerializableValues
             }
 
             object containedValue = _valuePropertyInfo.GetValue( Value );
-            ISerializableValue serializableValue = _typeManager.WrapRawValue( _contentType, containedValue );
-            serializableValue.Write( writer );
+            writer.WriteSonezakiObject( _contentType, containedValue );
         }
     }
 }

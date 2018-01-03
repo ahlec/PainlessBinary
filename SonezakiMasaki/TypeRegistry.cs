@@ -86,14 +86,20 @@ namespace SonezakiMasaki
             return baseType.IsArray;
         }
 
-        static bool IsInvalidTypeToRegister( Type type )
+        static bool IsValidTypeToRegister( Type type )
         {
             if ( type.IsInterface )
             {
                 return false;
             }
 
-            return !type.GetGenericArguments().Any( IsInvalidTypeToRegister );
+            Type[] genericArguments = type.GetGenericArguments();
+            if ( genericArguments.Length == 0 )
+            {
+                return true;
+            }
+
+            return genericArguments.All( IsValidTypeToRegister );
         }
 
         static void GetInstantiatorAndWrapper( Type type, out ValueInstantiator instantiator, out ValueWrapper wrapper )
@@ -116,7 +122,7 @@ namespace SonezakiMasaki
                 return RegisterTypeReturnCode.TypeAlreadyRegistered;
             }
 
-            if ( IsInvalidTypeToRegister( type ) )
+            if ( !IsValidTypeToRegister( type ) )
             {
                 return RegisterTypeReturnCode.InvalidTypeToRegister;
             }

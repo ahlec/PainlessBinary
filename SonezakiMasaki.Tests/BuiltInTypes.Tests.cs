@@ -140,7 +140,7 @@ namespace SonezakiMasaki.Tests
         static void RunBuiltInTypeTest<T>( T value )
         {
             Serializer serializer = CreateSerializer();
-            byte[] streamBuffer = new byte[20];
+            byte[] streamBuffer = new byte[30];
 
             using ( MemoryStream serializeStream = new MemoryStream( streamBuffer, true ) )
             {

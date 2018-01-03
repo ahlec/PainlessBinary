@@ -59,9 +59,8 @@ namespace SonezakiMasaki.SerializableValues
         {
             for ( int index = 0; index < _listLength; ++index )
             {
-                ISerializableValue itemSerializableValue = _typeManager.Instantiate( _contentType, reader );
-                itemSerializableValue.Read( reader );
-                _list.Add( itemSerializableValue.Value );
+                object value = reader.ReadSonezakiObject( _contentType );
+                _list.Add( value );
             }
         }
 
@@ -71,8 +70,7 @@ namespace SonezakiMasaki.SerializableValues
 
             for ( int index = 0; index < _listLength; ++index )
             {
-                ISerializableValue itemSerializableValue = _typeManager.WrapRawValue( _contentType, _list[index] );
-                itemSerializableValue.Write( writer );
+                writer.WriteSonezakiObject( _contentType, _list[index] );
             }
         }
     }

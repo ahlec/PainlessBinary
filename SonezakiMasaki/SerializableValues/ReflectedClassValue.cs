@@ -42,10 +42,8 @@ namespace SonezakiMasaki.SerializableValues
 
             foreach ( SerializedMember member in _members )
             {
-                Type memberType = reader.ReadNextType();
-                ISerializableValue serializableValue = _typeManager.Instantiate( memberType, reader );
-                serializableValue.Read( reader );
-                member.SetValue( Value, serializableValue.Value );
+                object memberValue = reader.ReadSonezakiObject( member.Type );
+                member.SetValue( Value, memberValue );
             }
 
             int computedHash = reader.PopCompoundingHash();
@@ -63,9 +61,7 @@ namespace SonezakiMasaki.SerializableValues
             foreach ( SerializedMember member in _members )
             {
                 object rawValue = member.GetValue( Value );
-                ISerializableValue value = _typeManager.WrapRawValue( member.Type, rawValue );
-                writer.WriteType( member.Type );
-                value.Write( writer );
+                writer.WriteSonezakiObject( member.Type, rawValue );
             }
 
             int computedHash = writer.PopCompoundingHash();

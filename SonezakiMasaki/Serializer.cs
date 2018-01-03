@@ -59,15 +59,7 @@ namespace SonezakiMasaki
             }
         }
 
-        void SerializeFilePayload<T>( SonezakiWriter writer, T payload )
-        {
-            writer.WriteType( typeof( T ) );
-
-            ISerializableValue wrappedValue = _typeManager.WrapRawValue( typeof( T ), payload );
-            wrappedValue.Write( writer );
-        }
-
-        T DeserializeFilePayload<T>( SonezakiReader reader )
+        static T DeserializeFilePayload<T>( SonezakiReader reader )
         {
             Type fileType = reader.ReadNextType();
             if ( fileType != typeof( T ) )
@@ -75,9 +67,15 @@ namespace SonezakiMasaki
                 throw new DifferentFileTypeException( typeof( T ), fileType );
             }
 
-            ISerializableValue value = _typeManager.Instantiate( fileType, reader );
-            value.Read( reader );
-            return (T) value.Value;
+            object deserializedObject = reader.ReadSonezakiObject( typeof( T ) );
+            return (T) deserializedObject;
+        }
+
+        void SerializeFilePayload<T>( SonezakiWriter writer, T payload )
+        {
+            writer.WriteType( typeof( T ) );
+
+            writer.WriteSonezakiObject( typeof( T ), payload );
         }
     }
 }
