@@ -11,15 +11,11 @@ namespace SonezakiMasaki.SerializableValues
 {
     internal sealed class NullableValue : ISerializableValue
     {
-        readonly TypeManager _typeManager;
-        readonly Type _fullType;
         readonly PropertyInfo _valuePropertyInfo;
         readonly Type _contentType;
 
-        NullableValue( TypeManager typeManager, Type fullType, object value )
+        NullableValue( Type fullType, object value )
         {
-            _typeManager = typeManager;
-            _fullType = fullType;
             _valuePropertyInfo = fullType.GetProperty( "Value" );
             _contentType = fullType.GenericTypeArguments[0];
             Value = value;
@@ -29,37 +25,21 @@ namespace SonezakiMasaki.SerializableValues
 
         public static NullableValue Instantiate( TypeManager typeManager, Type fullType, SonezakiReader reader )
         {
-            return new NullableValue( typeManager, fullType, null );
+            return new NullableValue( fullType, null );
         }
 
         public static NullableValue WrapRawValue( TypeManager typeManager, Type fullType, object value )
         {
-            return new NullableValue( typeManager, fullType, value );
+            return new NullableValue( fullType, value );
         }
 
         public void Read( SonezakiReader reader )
         {
-            bool hasValue = reader.ReadBoolean();
-
-            if ( !hasValue )
-            {
-                Value = null;
-                return;
-            }
-
             Value = reader.ReadSonezakiObject( _contentType );
         }
 
         public void Write( SonezakiWriter writer )
         {
-            bool hasValue = ( Value != null );
-            writer.Write( hasValue );
-
-            if ( !hasValue )
-            {
-                return;
-            }
-
             object containedValue = _valuePropertyInfo.GetValue( Value );
             writer.WriteSonezakiObject( _contentType, containedValue );
         }

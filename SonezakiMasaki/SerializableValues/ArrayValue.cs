@@ -11,16 +11,13 @@ namespace SonezakiMasaki.SerializableValues
 {
     internal sealed class ArrayValue : ISerializableValue
     {
-        const int ArrayNullLengthValue = -1;
-        readonly TypeManager _typeManager;
         readonly Type _elementType;
         readonly int _rank;
         readonly IList _array;
         readonly int _arrayLength;
 
-        ArrayValue( TypeManager typeManager, Type arrayType, IList array, int arrayLength )
+        ArrayValue( Type arrayType, IList array, int arrayLength )
         {
-            _typeManager = typeManager;
             _elementType = arrayType.GetElementType();
             _rank = arrayType.GetArrayRank();
             _array = array;
@@ -32,29 +29,14 @@ namespace SonezakiMasaki.SerializableValues
         public static ArrayValue Instantiate( TypeManager typeManager, Type fullType, SonezakiReader reader )
         {
             int arrayLength = reader.ReadInt32();
-
-            IList array;
-            if ( arrayLength != ArrayNullLengthValue )
-            {
-                array = (IList) Activator.CreateInstance( fullType, arrayLength );
-            }
-            else
-            {
-                array = null;
-            }
-
-            return new ArrayValue( typeManager, fullType, array, arrayLength );
+            IList array = (IList) Activator.CreateInstance( fullType, arrayLength );
+            return new ArrayValue( fullType, array, arrayLength );
         }
 
         public static ArrayValue WrapRawValue( TypeManager typeManager, Type fullType, object value )
         {
-            if ( value == null )
-            {
-                return new ArrayValue( typeManager, fullType, null, ArrayNullLengthValue );
-            }
-
             IList array = (IList) value;
-            return new ArrayValue( typeManager, fullType, array, array.Count );
+            return new ArrayValue( fullType, array, array.Count );
         }
 
         public void Read( SonezakiReader reader )

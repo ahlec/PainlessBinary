@@ -11,15 +11,12 @@ namespace SonezakiMasaki.SerializableValues
 {
     internal sealed class ListValue : ISerializableValue
     {
-        const int ListNullLengthValue = -1;
-        readonly TypeManager _typeManager;
         readonly Type _contentType;
         readonly IList _list;
         readonly int _listLength;
 
-        ListValue( TypeManager typeManager, Type listType, IList list, int listLength )
+        ListValue( Type listType, IList list, int listLength )
         {
-            _typeManager = typeManager;
             _contentType = listType.GenericTypeArguments[0];
             _list = list;
             _listLength = listLength;
@@ -30,29 +27,14 @@ namespace SonezakiMasaki.SerializableValues
         public static ListValue Instantiate( TypeManager typeManager, Type fullType, SonezakiReader reader )
         {
             int listLength = reader.ReadInt32();
-
-            IList list;
-            if ( listLength != ListNullLengthValue )
-            {
-                list = (IList) Activator.CreateInstance( fullType, listLength );
-            }
-            else
-            {
-                list = null;
-            }
-
-            return new ListValue( typeManager, fullType, list, listLength );
+            IList list = (IList) Activator.CreateInstance( fullType, listLength );
+            return new ListValue( fullType, list, listLength );
         }
 
         public static ListValue WrapRawValue( TypeManager typeManager, Type fullType, object value )
         {
-            if ( value == null )
-            {
-                return new ListValue( typeManager, fullType, null, ListNullLengthValue );
-            }
-
             IList list = (IList) value;
-            return new ListValue( typeManager, fullType, list, list.Count );
+            return new ListValue( fullType, list, list.Count );
         }
 
         public void Read( SonezakiReader reader )
