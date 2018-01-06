@@ -9,7 +9,7 @@
   "settings": {
     "documentationRules": {
       "companyName": "Alec Deitloff",
-      "copyrightText": "------------------------------------------------------------------------------------------------------------------------\nSonezakiMasaki library project (https://github.com/ahlec/SonezakiMasaki/), a subproject of the Pokémon Kristall project.\nThis library is available to the public under the MIT license.\n------------------------------------------------------------------------------------------------------------------------",
+      "copyrightText": "------------------------------------------------------------------------------------------------------------------------\nPainlessBinary library project (https://github.com/ahlec/PainlessBinary/), a subproject of the Pokémon Kristall project.\nThis library is available to the public under the MIT license.\n------------------------------------------------------------------------------------------------------------------------",
       "xmlHeader": false,
       "headerDecoration": "------------------------------------------------------------------------------------------------------------------------"
     }

@@ -94,9 +94,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SonezakiMasaki\SonezakiMasaki.csproj">
+    <ProjectReference Include="..\PainlessBinary\PainlessBinary.csproj">
       <Project>{6ff1705f-31d3-44ee-b58c-f687529805b8}</Project>
-      <Name>SonezakiMasaki</Name>
+      <Name>PainlessBinary</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
