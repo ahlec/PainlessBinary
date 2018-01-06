@@ -3,6 +3,9 @@
 // This library is available to the public under the MIT license.
 // ------------------------------------------------------------------------------------------------------------------------
 
+using System;
+using System.IO;
+
 namespace SonezakiMasaki.IO
 {
     internal static class StandardReadWriteOperations
@@ -34,5 +37,79 @@ namespace SonezakiMasaki.IO
         public static ReadWriteOperations<ushort> UInt16 { get; } = new ReadWriteOperations<ushort>( reader => reader.ReadUInt16(), ( writer, value ) => writer.Write( value ) );
 
         public static ReadWriteOperations<string> String { get; } = new ReadWriteOperations<string>( reader => reader.ReadString(), ( writer, value ) => writer.Write( value ) );
+
+        public static ReadWriteOperations<DateTime> DateTime { get; } = new ReadWriteOperations<DateTime>( ReadDateTime, WriteDateTime );
+
+        public static ReadWriteOperations<Guid> Guid { get; } = new ReadWriteOperations<Guid>( ReadGuid, WriteGuid );
+
+        public static ReadWriteOperations<TimeSpan> TimeSpan { get; } = new ReadWriteOperations<TimeSpan>( ReadTimeSpan, WriteTimeSpan );
+
+        public static ReadWriteOperations<DateTimeOffset> DateTimeOffset { get; } = new ReadWriteOperations<DateTimeOffset>( ReadDateTimeOffset, WriteDateTimeOffset );
+
+        public static ReadWriteOperations<Uri> Uri { get; } = new ReadWriteOperations<Uri>( ReadUri, WriteUri );
+
+        static DateTime ReadDateTime( SonezakiReader reader )
+        {
+            long binary = reader.ReadInt64();
+            return System.DateTime.FromBinary( binary );
+        }
+
+        static void WriteDateTime( SonezakiWriter writer, DateTime value )
+        {
+            writer.Write( value.ToBinary() );
+        }
+
+        static Guid ReadGuid( SonezakiReader reader )
+        {
+            const int GuidByteArrayLength = 16;
+            byte[] byteArray = new byte[GuidByteArrayLength];
+            int numBytesRead = reader.Read( byteArray, 0, GuidByteArrayLength );
+            if ( numBytesRead != GuidByteArrayLength )
+            {
+                throw new InvalidDataException( "Could not read the 16 bytes required for a Guid." );
+            }
+
+            return new Guid( byteArray );
+        }
+
+        static void WriteGuid( SonezakiWriter writer, Guid value )
+        {
+            byte[] byteArray = value.ToByteArray();
+            writer.Write( byteArray );
+        }
+
+        static TimeSpan ReadTimeSpan( SonezakiReader reader )
+        {
+            long ticks = reader.ReadInt64();
+            return System.TimeSpan.FromTicks( ticks );
+        }
+
+        static void WriteTimeSpan( SonezakiWriter writer, TimeSpan value )
+        {
+            writer.Write( value.Ticks );
+        }
+
+        static DateTimeOffset ReadDateTimeOffset( SonezakiReader reader )
+        {
+            string value = reader.ReadString();
+            return System.DateTimeOffset.Parse( value );
+        }
+
+        static void WriteDateTimeOffset( SonezakiWriter writer, DateTimeOffset value )
+        {
+            string dataRepresentation = value.ToString( "yyyy-MM-ddTHH:mm:ss.fffffffzzz" );
+            writer.Write( dataRepresentation );
+        }
+
+        static Uri ReadUri( SonezakiReader reader )
+        {
+            string value = reader.ReadString();
+            return new Uri( value );
+        }
+
+        static void WriteUri( SonezakiWriter writer, Uri value )
+        {
+            writer.Write( value.ToString() );
+        }
     }
 }

@@ -148,6 +148,11 @@ namespace SonezakiMasaki
             RegisterBuiltInValueType( StandardReadWriteOperations.Int16 );
             RegisterBuiltInValueType( StandardReadWriteOperations.UInt16 );
             RegisterBuiltInValueType( StandardReadWriteOperations.String );
+            RegisterBuiltInValueType( StandardReadWriteOperations.DateTime );
+            RegisterBuiltInValueType( StandardReadWriteOperations.Guid );
+            RegisterBuiltInValueType( StandardReadWriteOperations.TimeSpan );
+            RegisterBuiltInValueType( StandardReadWriteOperations.DateTimeOffset );
+            RegisterBuiltInValueType( StandardReadWriteOperations.Uri );
 
             RegisterBuiltInType( typeof( List<> ), StandardTypeSignature.Create, ListValue.Instantiate, ListValue.WrapRawValue );
             RegisterBuiltInType( typeof( Nullable<> ), StandardTypeSignature.Create, NullableValue.Instantiate, NullableValue.WrapRawValue );

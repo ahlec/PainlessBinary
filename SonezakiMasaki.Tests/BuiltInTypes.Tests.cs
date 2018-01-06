@@ -3,6 +3,7 @@
 // This library is available to the public under the MIT license.
 // ------------------------------------------------------------------------------------------------------------------------
 
+using System;
 using System.IO;
 using NUnit.Framework;
 
@@ -137,10 +138,54 @@ namespace SonezakiMasaki.Tests
             RunBuiltInTypeTest<string>( "hello" );
         }
 
+        [Test]
+        public void BuiltInType_DateTime()
+        {
+            RunBuiltInTypeTest<DateTime>( DateTime.MinValue );
+            RunBuiltInTypeTest<DateTime>( DateTime.MaxValue );
+            RunBuiltInTypeTest<DateTime>( DateTime.Now );
+            RunBuiltInTypeTest<DateTime>( DateTime.UtcNow );
+            RunBuiltInTypeTest<DateTime>( DateTime.Today );
+        }
+
+        [Test]
+        public void BuiltInType_Guid()
+        {
+            RunBuiltInTypeTest<Guid>( Guid.Empty );
+            RunBuiltInTypeTest<Guid>( Guid.NewGuid() );
+            RunBuiltInTypeTest<Guid>( new Guid( 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 ) );
+        }
+
+        [Test]
+        public void BuiltInType_TimeSpan()
+        {
+            RunBuiltInTypeTest<TimeSpan>( TimeSpan.MinValue );
+            RunBuiltInTypeTest<TimeSpan>( TimeSpan.MaxValue );
+            RunBuiltInTypeTest<TimeSpan>( TimeSpan.Zero );
+            RunBuiltInTypeTest<TimeSpan>( DateTime.UtcNow - DateTime.Now );
+        }
+
+        [Test]
+        public void BuiltInType_DateTimeOffset()
+        {
+            RunBuiltInTypeTest<DateTimeOffset>( DateTimeOffset.MinValue );
+            RunBuiltInTypeTest<DateTimeOffset>( DateTimeOffset.MaxValue );
+            RunBuiltInTypeTest<DateTimeOffset>( DateTimeOffset.Now );
+            RunBuiltInTypeTest<DateTimeOffset>( DateTimeOffset.UtcNow );
+        }
+
+        [Test]
+        public void BuiltInType_Uri()
+        {
+            RunBuiltInTypeTest<Uri>( new Uri( "https://www.google.com/" ) );
+            RunBuiltInTypeTest<Uri>( new Uri( "ftp://www.dropbox.com/" ) );
+            RunBuiltInTypeTest<Uri>( new Uri( "c:/my/files/myfile.txt" ) );
+        }
+
         static void RunBuiltInTypeTest<T>( T value )
         {
             Serializer serializer = CreateSerializer();
-            byte[] streamBuffer = new byte[30];
+            byte[] streamBuffer = new byte[50];
 
             using ( MemoryStream serializeStream = new MemoryStream( streamBuffer, true ) )
             {
