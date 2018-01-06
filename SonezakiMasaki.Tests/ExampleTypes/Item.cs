@@ -8,15 +8,9 @@ using SonezakiMasaki.Markup;
 namespace SonezakiMasaki.Tests.ExampleTypes
 {
     [BinaryDataType]
-    public sealed class Date
+    public sealed class Item
     {
         [BinaryMember( 1 )]
-        public byte Day { get; set; }
-
-        [BinaryMember( 2 )]
-        public Month Month { get; set; }
-
-        [BinaryMember( 3 )]
-        public int Year { get; set; }
+        public string Name { get; set; }
     }
 }

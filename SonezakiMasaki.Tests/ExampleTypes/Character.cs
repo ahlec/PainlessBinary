@@ -3,12 +3,24 @@
 // This library is available to the public under the MIT license.
 // ------------------------------------------------------------------------------------------------------------------------
 
+using System.Collections.Generic;
+using SonezakiMasaki.Markup;
+
 namespace SonezakiMasaki.Tests.ExampleTypes
 {
-    public enum Pronoun
+    [BinaryDataType]
+    public sealed class Character
     {
-        He,
-        She,
-        They
+        [BinaryMember( 1 )]
+        public string Name { get; set; }
+
+        [BinaryMember( 2 )]
+        public int Age { get; set; }
+
+        [BinaryMember( 3 )]
+        public bool IsFriendly { get; set; }
+
+        [BinaryMember( 4 )]
+        public List<Item> Inventory { get; set; } = new List<Item>();
     }
 }

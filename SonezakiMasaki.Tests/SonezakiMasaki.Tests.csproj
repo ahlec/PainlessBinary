@@ -50,11 +50,13 @@
     <Compile Include="Arrays.Tests.cs" />
     <Compile Include="BuiltInTypes.Tests.cs" />
     <Compile Include="ExampleTypes\Date.cs" />
+    <Compile Include="ExampleTypes\GameData.cs" />
+    <Compile Include="ExampleTypes\Item.cs" />
     <Compile Include="ExampleTypes\Month.cs" />
-    <Compile Include="ExampleTypes\Person.cs" />
-    <Compile Include="ExampleTypes\Pronoun.cs" />
+    <Compile Include="ExampleTypes\Character.cs" />
     <Compile Include="Lists.Tests.cs" />
     <Compile Include="Nullable.Tests.cs" />
+    <Compile Include="ComplexTypes.Tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegisteringTypes.Tests.cs" />
     <Compile Include="SonezakiUnitTestBase.cs" />

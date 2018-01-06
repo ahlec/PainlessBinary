@@ -19,10 +19,11 @@ namespace SonezakiMasaki.Tests
         static TypeRegistry CreateTypeRegistry()
         {
             TypeRegistry typeRegistry = new TypeRegistry();
-            typeRegistry.RegisterType( typeof( Person ) );
+            typeRegistry.RegisterType( typeof( Character ) );
             typeRegistry.RegisterType( typeof( Date ) );
+            typeRegistry.RegisterType( typeof( GameData ) );
+            typeRegistry.RegisterType( typeof( Item ) );
             typeRegistry.RegisterType( typeof( Month ) );
-            typeRegistry.RegisterType( typeof( Pronoun ) );
             return typeRegistry;
         }
     }
