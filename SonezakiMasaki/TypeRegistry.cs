@@ -6,7 +6,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using SonezakiMasaki.IO;
+using SonezakiMasaki.Markup;
 using SonezakiMasaki.SerializableValues;
 using SonezakiMasaki.TypeSignatures;
 
@@ -27,9 +29,10 @@ namespace SonezakiMasaki
 
         enum RegisterTypeReturnCode
         {
-            TypeAlreadyRegistered = 0,
-            InvalidTypeToRegister = 1,
-            Success = 2
+            DoesNotHaveBinaryDataType,
+            TypeAlreadyRegistered,
+            InvalidTypeToRegister,
+            Success
         }
 
         internal uint ArrayId { get; private set; }
@@ -39,6 +42,8 @@ namespace SonezakiMasaki
             RegisterTypeReturnCode returnCode = RegisterTypeInternal( type );
             switch ( returnCode )
             {
+                case RegisterTypeReturnCode.DoesNotHaveBinaryDataType:
+                    throw new InvalidOperationException( $"The type {type} is not marked up with {nameof( BinaryDataTypeAttribute )}." );
                 case RegisterTypeReturnCode.TypeAlreadyRegistered:
                     throw new InvalidOperationException( $"The type {type} has already been registered." );
                 case RegisterTypeReturnCode.InvalidTypeToRegister:
@@ -81,6 +86,16 @@ namespace SonezakiMasaki
             return _registeredTypes.TryGetValue( type, out registeredType );
         }
 
+        static bool DoesTypeRequireDataTypeAttribute( Type baseType )
+        {
+            if ( baseType.IsEnum )
+            {
+                return false;
+            }
+
+            return ( baseType.IsClass || baseType.IsValueType );
+        }
+
         static bool IsSpecialRegisteredType( Type baseType )
         {
             return baseType.IsArray;
@@ -117,6 +132,15 @@ namespace SonezakiMasaki
 
         RegisterTypeReturnCode RegisterTypeInternal( Type type )
         {
+            if ( DoesTypeRequireDataTypeAttribute( type ) )
+            {
+                BinaryDataTypeAttribute dataTypeAttribute = type.GetCustomAttribute<BinaryDataTypeAttribute>();
+                if ( dataTypeAttribute == null )
+                {
+                    return RegisterTypeReturnCode.DoesNotHaveBinaryDataType;
+                }
+            }
+
             if ( IsTypeRegistered( type ) )
             {
                 return RegisterTypeReturnCode.TypeAlreadyRegistered;

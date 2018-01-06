@@ -25,5 +25,12 @@ namespace SonezakiMasaki.Tests
             TypeRegistry typeRegistry = new TypeRegistry();
             Assert.Throws<InvalidOperationException>( () => typeRegistry.RegisterType( typeof( List<IEnumerable<int>> ) ) );
         }
+
+        [Test]
+        public void RegisteringTypes_CannotRegisterWithoutDataTypeAttribute()
+        {
+            TypeRegistry typeRegistry = new TypeRegistry();
+            Assert.Throws<InvalidOperationException>( () => typeRegistry.RegisterType( typeof( RegisteringTypesTests ) ) );
+        }
     }
 }

@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using SonezakiMasaki.Markup;
 
 namespace SonezakiMasaki.Reflection
 {
@@ -17,7 +18,7 @@ namespace SonezakiMasaki.Reflection
             Type = type;
         }
 
-        delegate SerializedMember MemberConstructor<in TReflectionInfo>( TReflectionInfo memberInfo, SerializedMemberAttribute attribute )
+        delegate SerializedMember MemberConstructor<in TReflectionInfo>( TReflectionInfo memberInfo, BinaryMemberAttribute attribute )
             where TReflectionInfo : MemberInfo;
 
         public int Order { get; }
@@ -50,7 +51,7 @@ namespace SonezakiMasaki.Reflection
         {
             foreach ( TReflectionInfo member in info )
             {
-                SerializedMemberAttribute attribute = member.GetCustomAttribute<SerializedMemberAttribute>();
+                BinaryMemberAttribute attribute = member.GetCustomAttribute<BinaryMemberAttribute>();
                 if ( attribute == null )
                 {
                     continue;

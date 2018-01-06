@@ -4,6 +4,7 @@
 // ------------------------------------------------------------------------------------------------------------------------
 
 using System.Reflection;
+using SonezakiMasaki.Markup;
 
 namespace SonezakiMasaki.Reflection
 {
@@ -17,7 +18,7 @@ namespace SonezakiMasaki.Reflection
             _propertyInfo = propertyInfo;
         }
 
-        public static SerializedProperty Create( PropertyInfo propertyInfo, SerializedMemberAttribute attribute )
+        public static SerializedProperty Create( PropertyInfo propertyInfo, BinaryMemberAttribute attribute )
         {
             return new SerializedProperty( attribute.Order, propertyInfo );
         }

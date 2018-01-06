@@ -4,6 +4,7 @@
 // ------------------------------------------------------------------------------------------------------------------------
 
 using System.Reflection;
+using SonezakiMasaki.Markup;
 
 namespace SonezakiMasaki.Reflection
 {
@@ -17,7 +18,7 @@ namespace SonezakiMasaki.Reflection
             _fieldInfo = fieldInfo;
         }
 
-        public static SerializedField Create( FieldInfo fieldInfo, SerializedMemberAttribute attribute )
+        public static SerializedField Create( FieldInfo fieldInfo, BinaryMemberAttribute attribute )
         {
             return new SerializedField( attribute.Order, fieldInfo );
         }

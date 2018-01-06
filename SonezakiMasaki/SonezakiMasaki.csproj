@@ -45,7 +45,7 @@
     <AdditionalFiles Include="../stylecop.json">
       <Link>stylecop.json</Link>
     </AdditionalFiles>
-    <Compile Include="BinarySerializedAsReferenceAttribute.cs" />
+    <Compile Include="Markup\BinaryDataTypeAttribute.cs" />
     <Compile Include="Exceptions\DataIntegrityQuestionableException.cs" />
     <Compile Include="IMultiKeyValue.cs" />
     <Compile Include="IO\CompoundingHash.cs" />
@@ -54,6 +54,7 @@
     <Compile Include="IO\SonezakiStreamWrapper.cs" />
     <Compile Include="IO\SonezakiWriter.cs" />
     <Compile Include="IO\StandardReadWriteOperations.cs" />
+    <Compile Include="Markup\BinarySerializationScheme.cs" />
     <Compile Include="MultiKeyDictionary.cs" />
     <Compile Include="Reflection\SerializedMember.cs" />
     <Compile Include="Reflection\SerializedField.cs" />
@@ -73,7 +74,7 @@
     <Compile Include="SerializableValues\ReflectedClassValue.cs" />
     <Compile Include="SerializationFile.cs" />
     <Compile Include="SerializationType.cs" />
-    <Compile Include="SerializedMemberAttribute.cs" />
+    <Compile Include="Markup\BinaryMemberAttribute.cs" />
     <Compile Include="Serializer.cs" />
     <Compile Include="TypeRegistry.cs" />
     <Compile Include="TypeSignatures\ArrayTypeSignature.cs" />

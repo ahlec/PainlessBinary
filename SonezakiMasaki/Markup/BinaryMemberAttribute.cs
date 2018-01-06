@@ -5,12 +5,12 @@
 
 using System;
 
-namespace SonezakiMasaki
+namespace SonezakiMasaki.Markup
 {
     [AttributeUsage( AttributeTargets.Field | AttributeTargets.Property )]
-    public sealed class SerializedMemberAttribute : Attribute
+    public sealed class BinaryMemberAttribute : Attribute
     {
-        public SerializedMemberAttribute( int order )
+        public BinaryMemberAttribute( int order )
         {
             Order = order;
         }

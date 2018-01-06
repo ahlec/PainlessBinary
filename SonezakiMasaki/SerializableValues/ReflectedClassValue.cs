@@ -14,12 +14,10 @@ namespace SonezakiMasaki.SerializableValues
     internal sealed class ReflectedClassValue : ISerializableValue
     {
         readonly IReadOnlyList<SerializedMember> _members;
-        readonly TypeManager _typeManager;
 
-        ReflectedClassValue( Type type, TypeManager typeManager, object value )
+        ReflectedClassValue( Type type, object value )
         {
             _members = SerializedMember.GetOrderedSerializedMembers( type );
-            _typeManager = typeManager;
             Value = value;
         }
 
@@ -28,12 +26,12 @@ namespace SonezakiMasaki.SerializableValues
         public static ReflectedClassValue Instantiate( TypeManager typeManager, Type fullType, SonezakiReader reader )
         {
             object value = Activator.CreateInstance( fullType );
-            return new ReflectedClassValue( fullType, typeManager, value );
+            return new ReflectedClassValue( fullType, value );
         }
 
         public static ReflectedClassValue WrapRawValue( TypeManager typeManager, Type fullType, object value )
         {
-            return new ReflectedClassValue( fullType, typeManager, value );
+            return new ReflectedClassValue( fullType, value );
         }
 
         public void Read( SonezakiReader reader )

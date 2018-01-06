@@ -5,10 +5,16 @@
 
 using System;
 
-namespace SonezakiMasaki
+namespace SonezakiMasaki.Markup
 {
     [AttributeUsage( AttributeTargets.Class )]
-    public sealed class BinarySerializedAsReferenceAttribute : Attribute
+    public sealed class BinaryDataTypeAttribute : Attribute
     {
+        public BinaryDataTypeAttribute( BinarySerializationScheme scheme = BinarySerializationScheme.Value )
+        {
+            Scheme = scheme;
+        }
+
+        public BinarySerializationScheme Scheme { get; }
     }
 }

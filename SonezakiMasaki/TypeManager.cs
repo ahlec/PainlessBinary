@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using SonezakiMasaki.Exceptions;
 using SonezakiMasaki.IO;
+using SonezakiMasaki.Markup;
 using SonezakiMasaki.TypeSignatures;
 
 namespace SonezakiMasaki
@@ -45,7 +46,16 @@ namespace SonezakiMasaki
                 return isSerializedAsReference;
             }
 
-            isSerializedAsReference = ( type.GetCustomAttribute<BinarySerializedAsReferenceAttribute>() != null );
+            BinaryDataTypeAttribute dataTypeAttribute = type.GetCustomAttribute<BinaryDataTypeAttribute>();
+            if ( dataTypeAttribute != null )
+            {
+                isSerializedAsReference = ( dataTypeAttribute.Scheme == BinarySerializationScheme.Reference );
+            }
+            else
+            {
+                isSerializedAsReference = false;
+            }
+
             _isTypeSerializedAsReference[type] = isSerializedAsReference;
             return isSerializedAsReference;
         }
