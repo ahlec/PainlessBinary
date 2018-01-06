@@ -25,7 +25,7 @@ namespace PainlessBinary.TypeSignatures
             return new StandardTypeSignature( id, baseType );
         }
 
-        public Type Read( SonezakiReader reader )
+        public Type Read( PainlessBinaryReader reader )
         {
             int numGenericParameters = CountNumberGenericParameters( _baseType );
             if ( numGenericParameters == 0 )
@@ -36,7 +36,7 @@ namespace PainlessBinary.TypeSignatures
             return ResolveGenericArguments( reader, _baseType, numGenericParameters );
         }
 
-        public void Write( SonezakiWriter writer, Type fullType )
+        public void Write( PainlessBinaryWriter writer, Type fullType )
         {
             writer.Write( _id );
 
@@ -64,7 +64,7 @@ namespace PainlessBinary.TypeSignatures
             return numGenericParameters;
         }
 
-        Type ResolveGenericArguments( SonezakiReader reader, Type baseType, int numGenericParameters )
+        Type ResolveGenericArguments( PainlessBinaryReader reader, Type baseType, int numGenericParameters )
         {
             Type[] genericArguments = new Type[numGenericParameters];
 

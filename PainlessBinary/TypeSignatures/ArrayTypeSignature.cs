@@ -22,7 +22,7 @@ namespace PainlessBinary.TypeSignatures
             return new ArrayTypeSignature( id );
         }
 
-        public Type Read( SonezakiReader reader )
+        public Type Read( PainlessBinaryReader reader )
         {
             Type elementType = reader.ReadNextType();
             int rank = reader.ReadInt32();
@@ -35,7 +35,7 @@ namespace PainlessBinary.TypeSignatures
             return elementType.MakeArrayType( rank );
         }
 
-        public void Write( SonezakiWriter writer, Type fullType )
+        public void Write( PainlessBinaryWriter writer, Type fullType )
         {
             writer.Write( _id );
 

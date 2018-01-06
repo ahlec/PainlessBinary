@@ -10,8 +10,8 @@ namespace PainlessBinary.TypeSignatures
 {
     internal interface ITypeSignature
     {
-        Type Read( SonezakiReader reader );
+        Type Read( PainlessBinaryReader reader );
 
-        void Write( SonezakiWriter writer, Type fullType );
+        void Write( PainlessBinaryWriter writer, Type fullType );
     }
 }

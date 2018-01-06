@@ -10,7 +10,7 @@ using NUnit.Framework;
 namespace PainlessBinary.Tests
 {
     [TestFixture]
-    public sealed class RegisteringTypesTests : SonezakiUnitTestBase
+    public sealed class RegisteringTypesTests : UnitTestBase
     {
         [Test]
         public void RegisteringTypes_CannotRegisterInterface()

@@ -9,17 +9,17 @@ using PainlessBinary.TypeSignatures;
 
 namespace PainlessBinary.IO
 {
-    internal sealed class SonezakiReader : BinaryReader
+    internal sealed class PainlessBinaryReader : BinaryReader
     {
-        readonly SonezakiStreamWrapper _sonezakiStreamWrapper;
+        readonly StreamWrapper _streamWrapper;
         readonly TypeManager _typeManager;
         readonly int _hashSeed;
         readonly int _hashMultiplicationConstant;
 
-        public SonezakiReader( SonezakiStreamWrapper dataStream, TypeManager typeManager, int hashSeed, int hashMultiplicationConstant )
+        public PainlessBinaryReader( StreamWrapper dataStream, TypeManager typeManager, int hashSeed, int hashMultiplicationConstant )
             : base( dataStream )
         {
-            _sonezakiStreamWrapper = dataStream;
+            _streamWrapper = dataStream;
             _typeManager = typeManager;
             _hashSeed = hashSeed;
             _hashMultiplicationConstant = hashMultiplicationConstant;
@@ -28,12 +28,12 @@ namespace PainlessBinary.IO
         public void PushCompoundingHash()
         {
             CompoundingHash hash = new CompoundingHash( _hashSeed, _hashMultiplicationConstant );
-            _sonezakiStreamWrapper.PushCompoundingHash( hash );
+            _streamWrapper.PushCompoundingHash( hash );
         }
 
         public int PopCompoundingHash()
         {
-            CompoundingHash hash = _sonezakiStreamWrapper.PopCompoundingHash();
+            CompoundingHash hash = _streamWrapper.PopCompoundingHash();
             return hash.HashValue;
         }
 
@@ -44,7 +44,7 @@ namespace PainlessBinary.IO
             return typeSignature.Read( this );
         }
 
-        public object ReadSonezakiObject( Type expectedType )
+        public object ReadPainlessBinaryObject( Type expectedType )
         {
             SerializationType serializationType = (SerializationType) ReadByte();
             switch ( serializationType )

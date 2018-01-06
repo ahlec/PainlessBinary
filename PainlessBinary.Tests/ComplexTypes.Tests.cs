@@ -9,7 +9,7 @@ using PainlessBinary.Tests.ExampleTypes;
 
 namespace PainlessBinary.Tests
 {
-    public sealed class ComplexTypesTests : SonezakiUnitTestBase
+    public sealed class ComplexTypesTests : UnitTestBase
     {
         [Test]
         public void ComplexTypes_CanBeNull()

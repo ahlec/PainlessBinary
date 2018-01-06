@@ -10,7 +10,7 @@ using PainlessBinary.Tests.ExampleTypes;
 
 namespace PainlessBinary.Tests
 {
-    public sealed class NullableTests : SonezakiUnitTestBase
+    public sealed class NullableTests : UnitTestBase
     {
         /// <summary>
         /// Tests to make sure that if we serialize int?, we get an error trying to deserialize it as regular int.

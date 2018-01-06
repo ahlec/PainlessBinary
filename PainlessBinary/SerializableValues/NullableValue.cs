@@ -23,7 +23,7 @@ namespace PainlessBinary.SerializableValues
 
         public object Value { get; private set; }
 
-        public static NullableValue Instantiate( TypeManager typeManager, Type fullType, SonezakiReader reader )
+        public static NullableValue Instantiate( TypeManager typeManager, Type fullType, PainlessBinaryReader reader )
         {
             return new NullableValue( fullType, null );
         }
@@ -33,15 +33,15 @@ namespace PainlessBinary.SerializableValues
             return new NullableValue( fullType, value );
         }
 
-        public void Read( SonezakiReader reader )
+        public void Read( PainlessBinaryReader reader )
         {
-            Value = reader.ReadSonezakiObject( _contentType );
+            Value = reader.ReadPainlessBinaryObject( _contentType );
         }
 
-        public void Write( SonezakiWriter writer )
+        public void Write( PainlessBinaryWriter writer )
         {
             object containedValue = _valuePropertyInfo.GetValue( Value );
-            writer.WriteSonezakiObject( _contentType, containedValue );
+            writer.WritePainlessBinaryObject( _contentType, containedValue );
         }
     }
 }

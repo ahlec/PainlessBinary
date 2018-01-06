@@ -11,8 +11,8 @@ namespace PainlessBinary
     {
         object Value { get; }
 
-        void Read( SonezakiReader reader );
+        void Read( PainlessBinaryReader reader );
 
-        void Write( SonezakiWriter writer );
+        void Write( PainlessBinaryWriter writer );
     }
 }

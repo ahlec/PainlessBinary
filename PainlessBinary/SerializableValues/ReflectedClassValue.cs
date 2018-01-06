@@ -23,7 +23,7 @@ namespace PainlessBinary.SerializableValues
 
         public object Value { get; }
 
-        public static ReflectedClassValue Instantiate( TypeManager typeManager, Type fullType, SonezakiReader reader )
+        public static ReflectedClassValue Instantiate( TypeManager typeManager, Type fullType, PainlessBinaryReader reader )
         {
             object value = Activator.CreateInstance( fullType );
             return new ReflectedClassValue( fullType, value );
@@ -34,13 +34,13 @@ namespace PainlessBinary.SerializableValues
             return new ReflectedClassValue( fullType, value );
         }
 
-        public void Read( SonezakiReader reader )
+        public void Read( PainlessBinaryReader reader )
         {
             reader.PushCompoundingHash();
 
             foreach ( SerializedMember member in _members )
             {
-                object memberValue = reader.ReadSonezakiObject( member.Type );
+                object memberValue = reader.ReadPainlessBinaryObject( member.Type );
                 member.SetValue( Value, memberValue );
             }
 
@@ -52,14 +52,14 @@ namespace PainlessBinary.SerializableValues
             }
         }
 
-        public void Write( SonezakiWriter writer )
+        public void Write( PainlessBinaryWriter writer )
         {
             writer.PushCompoundingHash();
 
             foreach ( SerializedMember member in _members )
             {
                 object rawValue = member.GetValue( Value );
-                writer.WriteSonezakiObject( member.Type, rawValue );
+                writer.WritePainlessBinaryObject( member.Type, rawValue );
             }
 
             int computedHash = writer.PopCompoundingHash();

@@ -13,9 +13,9 @@ namespace PainlessBinary.IO
             WriteFunction = writeFunction;
         }
 
-        internal delegate T BinaryReadFunction( SonezakiReader reader );
+        internal delegate T BinaryReadFunction( PainlessBinaryReader reader );
 
-        internal delegate void BinaryWriteFunction( SonezakiWriter writer, T value );
+        internal delegate void BinaryWriteFunction( PainlessBinaryWriter writer, T value );
 
         public BinaryReadFunction ReadFunction { get; }
 

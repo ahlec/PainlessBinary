@@ -35,9 +35,9 @@ namespace PainlessBinary
                 throw new ArgumentNullException( nameof( file ) );
             }
 
-            using ( SonezakiStreamWrapper streamWrapper = new SonezakiStreamWrapper( dataStream ) )
+            using ( StreamWrapper streamWrapper = new StreamWrapper( dataStream ) )
             {
-                using ( SonezakiWriter writer = new SonezakiWriter( streamWrapper, _typeManager, HashBaseValue, HashMultiplicationConstant ) )
+                using ( PainlessBinaryWriter writer = new PainlessBinaryWriter( streamWrapper, _typeManager, HashBaseValue, HashMultiplicationConstant ) )
                 {
                     SerializeFilePayload( writer, file.Payload );
                 }
@@ -46,9 +46,9 @@ namespace PainlessBinary
 
         public SerializationFile<T> DeserializeFile<T>( Stream dataStream )
         {
-            using ( SonezakiStreamWrapper streamWrapper = new SonezakiStreamWrapper( dataStream ) )
+            using ( StreamWrapper streamWrapper = new StreamWrapper( dataStream ) )
             {
-                using ( SonezakiReader reader = new SonezakiReader( streamWrapper, _typeManager, HashBaseValue, HashMultiplicationConstant ) )
+                using ( PainlessBinaryReader reader = new PainlessBinaryReader( streamWrapper, _typeManager, HashBaseValue, HashMultiplicationConstant ) )
                 {
                     T payload = DeserializeFilePayload<T>( reader );
                     return new SerializationFile<T>
@@ -59,7 +59,7 @@ namespace PainlessBinary
             }
         }
 
-        static T DeserializeFilePayload<T>( SonezakiReader reader )
+        static T DeserializeFilePayload<T>( PainlessBinaryReader reader )
         {
             Type fileType = reader.ReadNextType();
             if ( fileType != typeof( T ) )
@@ -67,15 +67,15 @@ namespace PainlessBinary
                 throw new DifferentFileTypeException( typeof( T ), fileType );
             }
 
-            object deserializedObject = reader.ReadSonezakiObject( typeof( T ) );
+            object deserializedObject = reader.ReadPainlessBinaryObject( typeof( T ) );
             return (T) deserializedObject;
         }
 
-        void SerializeFilePayload<T>( SonezakiWriter writer, T payload )
+        void SerializeFilePayload<T>( PainlessBinaryWriter writer, T payload )
         {
             writer.WriteType( typeof( T ) );
 
-            writer.WriteSonezakiObject( typeof( T ), payload );
+            writer.WritePainlessBinaryObject( typeof( T ), payload );
         }
     }
 }

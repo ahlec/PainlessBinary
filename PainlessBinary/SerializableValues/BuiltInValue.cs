@@ -30,12 +30,12 @@ namespace PainlessBinary.SerializableValues
             return ( typeManager, fullType, value ) => new BuiltInValue<T>( readWriteOperations, (T) value );
         }
 
-        public void Read( SonezakiReader reader )
+        public void Read( PainlessBinaryReader reader )
         {
             _value = _readWriteOperations.ReadFunction( reader );
         }
 
-        public void Write( SonezakiWriter writer )
+        public void Write( PainlessBinaryWriter writer )
         {
             _readWriteOperations.WriteFunction( writer, _value );
         }

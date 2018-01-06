@@ -7,7 +7,7 @@ using PainlessBinary.Tests.ExampleTypes;
 
 namespace PainlessBinary.Tests
 {
-    public abstract class SonezakiUnitTestBase
+    public abstract class UnitTestBase
     {
         protected static Serializer CreateSerializer()
         {

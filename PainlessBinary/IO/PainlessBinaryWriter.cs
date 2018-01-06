@@ -9,17 +9,17 @@ using PainlessBinary.TypeSignatures;
 
 namespace PainlessBinary.IO
 {
-    internal sealed class SonezakiWriter : BinaryWriter
+    internal sealed class PainlessBinaryWriter : BinaryWriter
     {
-        readonly SonezakiStreamWrapper _sonezakiStreamWrapper;
+        readonly StreamWrapper _streamWrapper;
         readonly TypeManager _typeManager;
         readonly int _hashSeed;
         readonly int _hashMultiplicationConstant;
 
-        public SonezakiWriter( SonezakiStreamWrapper dataStream, TypeManager typeManager, int hashSeed, int hashMultiplicationConstant )
+        public PainlessBinaryWriter( StreamWrapper dataStream, TypeManager typeManager, int hashSeed, int hashMultiplicationConstant )
             : base( dataStream )
         {
-            _sonezakiStreamWrapper = dataStream;
+            _streamWrapper = dataStream;
             _typeManager = typeManager;
             _hashSeed = hashSeed;
             _hashMultiplicationConstant = hashMultiplicationConstant;
@@ -28,12 +28,12 @@ namespace PainlessBinary.IO
         public void PushCompoundingHash()
         {
             CompoundingHash hash = new CompoundingHash( _hashSeed, _hashMultiplicationConstant );
-            _sonezakiStreamWrapper.PushCompoundingHash( hash );
+            _streamWrapper.PushCompoundingHash( hash );
         }
 
         public int PopCompoundingHash()
         {
-            CompoundingHash hash = _sonezakiStreamWrapper.PopCompoundingHash();
+            CompoundingHash hash = _streamWrapper.PopCompoundingHash();
             return hash.HashValue;
         }
 
@@ -48,7 +48,7 @@ namespace PainlessBinary.IO
             typeSignature.Write( this, type );
         }
 
-        public void WriteSonezakiObject( Type typeForSerializing, object value )
+        public void WritePainlessBinaryObject( Type typeForSerializing, object value )
         {
             SerializationType serializationType = DetermineSerializationType( typeForSerializing, value );
             Write( (byte) serializationType );

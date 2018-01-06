@@ -45,9 +45,9 @@ namespace PainlessBinary.SerializableValues
             Value = defaultValue;
         }
 
-        delegate object ReadUnderlyingTypeFunction( SonezakiReader reader );
+        delegate object ReadUnderlyingTypeFunction( PainlessBinaryReader reader );
 
-        delegate void WriteUnderlyingTypeFunction( SonezakiWriter writer, object underlyingValue );
+        delegate void WriteUnderlyingTypeFunction( PainlessBinaryWriter writer, object underlyingValue );
 
         public object Value { get; private set; }
 
@@ -62,14 +62,14 @@ namespace PainlessBinary.SerializableValues
             return ( typeManager, fullType, value ) => new EnumValue( enumType, value );
         }
 
-        public void Read( SonezakiReader reader )
+        public void Read( PainlessBinaryReader reader )
         {
             ReadUnderlyingTypeFunction readFunction = _readFunctions[_underlyingType];
             object underlyingValue = readFunction( reader );
             Value = Enum.ToObject( _enumType, underlyingValue );
         }
 
-        public void Write( SonezakiWriter writer )
+        public void Write( PainlessBinaryWriter writer )
         {
             WriteUnderlyingTypeFunction writeFunction = _writeFunctions[_underlyingType];
             object underlyingValue = Convert.ChangeType( Value, _underlyingType );

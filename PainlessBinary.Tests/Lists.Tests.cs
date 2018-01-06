@@ -10,7 +10,7 @@ using NUnit.Framework;
 namespace PainlessBinary.Tests
 {
     [TestFixture]
-    public sealed class ListsTests : SonezakiUnitTestBase
+    public sealed class ListsTests : UnitTestBase
     {
         [Test]
         public void Lists_CanBeNull()

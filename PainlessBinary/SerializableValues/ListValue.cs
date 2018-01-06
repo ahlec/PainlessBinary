@@ -24,7 +24,7 @@ namespace PainlessBinary.SerializableValues
 
         public object Value => _list;
 
-        public static ListValue Instantiate( TypeManager typeManager, Type fullType, SonezakiReader reader )
+        public static ListValue Instantiate( TypeManager typeManager, Type fullType, PainlessBinaryReader reader )
         {
             int listLength = reader.ReadInt32();
             IList list = (IList) Activator.CreateInstance( fullType, listLength );
@@ -37,22 +37,22 @@ namespace PainlessBinary.SerializableValues
             return new ListValue( fullType, list, list.Count );
         }
 
-        public void Read( SonezakiReader reader )
+        public void Read( PainlessBinaryReader reader )
         {
             for ( int index = 0; index < _listLength; ++index )
             {
-                object value = reader.ReadSonezakiObject( _contentType );
+                object value = reader.ReadPainlessBinaryObject( _contentType );
                 _list.Add( value );
             }
         }
 
-        public void Write( SonezakiWriter writer )
+        public void Write( PainlessBinaryWriter writer )
         {
             writer.Write( _listLength );
 
             for ( int index = 0; index < _listLength; ++index )
             {
-                writer.WriteSonezakiObject( _contentType, _list[index] );
+                writer.WritePainlessBinaryObject( _contentType, _list[index] );
             }
         }
     }

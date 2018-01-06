@@ -59,7 +59,7 @@
     <Compile Include="ComplexTypes.Tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegisteringTypes.Tests.cs" />
-    <Compile Include="SonezakiUnitTestBase.cs" />
+    <Compile Include="UnitTestBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <AdditionalFiles Include="../stylecop.json">

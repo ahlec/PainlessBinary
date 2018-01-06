@@ -26,7 +26,7 @@ namespace PainlessBinary.SerializableValues
 
         public object Value => _array;
 
-        public static ArrayValue Instantiate( TypeManager typeManager, Type fullType, SonezakiReader reader )
+        public static ArrayValue Instantiate( TypeManager typeManager, Type fullType, PainlessBinaryReader reader )
         {
             int arrayLength = reader.ReadInt32();
             IList array = (IList) Activator.CreateInstance( fullType, arrayLength );
@@ -39,7 +39,7 @@ namespace PainlessBinary.SerializableValues
             return new ArrayValue( fullType, array, array.Count );
         }
 
-        public void Read( SonezakiReader reader )
+        public void Read( PainlessBinaryReader reader )
         {
             if ( _rank == 1 )
             {
@@ -50,7 +50,7 @@ namespace PainlessBinary.SerializableValues
             throw new NotImplementedException();
         }
 
-        public void Write( SonezakiWriter writer )
+        public void Write( PainlessBinaryWriter writer )
         {
             writer.Write( _arrayLength );
 
@@ -58,16 +58,16 @@ namespace PainlessBinary.SerializableValues
             {
                 for ( int index = 0; index < _arrayLength; ++index )
                 {
-                    writer.WriteSonezakiObject( _elementType, _array[index] );
+                    writer.WritePainlessBinaryObject( _elementType, _array[index] );
                 }
             }
         }
 
-        void ReadIntoArray( SonezakiReader reader, IList destination )
+        void ReadIntoArray( PainlessBinaryReader reader, IList destination )
         {
             for ( int index = 0; index < _arrayLength; ++index )
             {
-                destination[index] = reader.ReadSonezakiObject( _elementType );
+                destination[index] = reader.ReadPainlessBinaryObject( _elementType );
             }
         }
     }

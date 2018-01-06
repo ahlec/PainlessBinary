@@ -10,7 +10,7 @@ using NUnit.Framework;
 namespace PainlessBinary.Tests
 {
     [TestFixture]
-    public sealed class BuiltInTypes : SonezakiUnitTestBase
+    public sealed class BuiltInTypes : UnitTestBase
     {
         [Test]
         public void BuiltInType_Boolean()

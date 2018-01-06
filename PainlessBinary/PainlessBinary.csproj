@@ -49,10 +49,10 @@
     <Compile Include="Exceptions\DataIntegrityQuestionableException.cs" />
     <Compile Include="IMultiKeyValue.cs" />
     <Compile Include="IO\CompoundingHash.cs" />
-    <Compile Include="IO\SonezakiReader.cs" />
+    <Compile Include="IO\PainlessBinaryReader.cs" />
     <Compile Include="IO\ReadWriteOperations.cs" />
-    <Compile Include="IO\SonezakiStreamWrapper.cs" />
-    <Compile Include="IO\SonezakiWriter.cs" />
+    <Compile Include="IO\StreamWrapper.cs" />
+    <Compile Include="IO\PainlessBinaryWriter.cs" />
     <Compile Include="IO\StandardReadWriteOperations.cs" />
     <Compile Include="Markup\BinarySerializationScheme.cs" />
     <Compile Include="MultiKeyDictionary.cs" />

@@ -60,7 +60,7 @@ namespace PainlessBinary
             return isSerializedAsReference;
         }
 
-        internal ISerializableValue Instantiate( Type type, SonezakiReader reader )
+        internal ISerializableValue Instantiate( Type type, PainlessBinaryReader reader )
         {
             RegisteredType registeredType = GetRegisteredType( type );
             ISerializableValue value = registeredType.Instantiator( this, type, reader );

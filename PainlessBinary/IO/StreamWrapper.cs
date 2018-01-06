@@ -9,12 +9,12 @@ using System.IO;
 
 namespace PainlessBinary.IO
 {
-    internal sealed class SonezakiStreamWrapper : Stream
+    internal sealed class StreamWrapper : Stream
     {
         readonly Stack<CompoundingHash> _compoundingHashes = new Stack<CompoundingHash>();
         readonly Stream _stream;
 
-        public SonezakiStreamWrapper( Stream stream )
+        public StreamWrapper( Stream stream )
         {
             _stream = stream ?? throw new ArgumentNullException( nameof( stream ) );
         }

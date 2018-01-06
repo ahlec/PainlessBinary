@@ -48,18 +48,18 @@ namespace PainlessBinary.IO
 
         public static ReadWriteOperations<Uri> Uri { get; } = new ReadWriteOperations<Uri>( ReadUri, WriteUri );
 
-        static DateTime ReadDateTime( SonezakiReader reader )
+        static DateTime ReadDateTime( PainlessBinaryReader reader )
         {
             long binary = reader.ReadInt64();
             return System.DateTime.FromBinary( binary );
         }
 
-        static void WriteDateTime( SonezakiWriter writer, DateTime value )
+        static void WriteDateTime( PainlessBinaryWriter writer, DateTime value )
         {
             writer.Write( value.ToBinary() );
         }
 
-        static Guid ReadGuid( SonezakiReader reader )
+        static Guid ReadGuid( PainlessBinaryReader reader )
         {
             const int GuidByteArrayLength = 16;
             byte[] byteArray = new byte[GuidByteArrayLength];
@@ -72,42 +72,42 @@ namespace PainlessBinary.IO
             return new Guid( byteArray );
         }
 
-        static void WriteGuid( SonezakiWriter writer, Guid value )
+        static void WriteGuid( PainlessBinaryWriter writer, Guid value )
         {
             byte[] byteArray = value.ToByteArray();
             writer.Write( byteArray );
         }
 
-        static TimeSpan ReadTimeSpan( SonezakiReader reader )
+        static TimeSpan ReadTimeSpan( PainlessBinaryReader reader )
         {
             long ticks = reader.ReadInt64();
             return System.TimeSpan.FromTicks( ticks );
         }
 
-        static void WriteTimeSpan( SonezakiWriter writer, TimeSpan value )
+        static void WriteTimeSpan( PainlessBinaryWriter writer, TimeSpan value )
         {
             writer.Write( value.Ticks );
         }
 
-        static DateTimeOffset ReadDateTimeOffset( SonezakiReader reader )
+        static DateTimeOffset ReadDateTimeOffset( PainlessBinaryReader reader )
         {
             string value = reader.ReadString();
             return System.DateTimeOffset.Parse( value );
         }
 
-        static void WriteDateTimeOffset( SonezakiWriter writer, DateTimeOffset value )
+        static void WriteDateTimeOffset( PainlessBinaryWriter writer, DateTimeOffset value )
         {
             string dataRepresentation = value.ToString( "yyyy-MM-ddTHH:mm:ss.fffffffzzz" );
             writer.Write( dataRepresentation );
         }
 
-        static Uri ReadUri( SonezakiReader reader )
+        static Uri ReadUri( PainlessBinaryReader reader )
         {
             string value = reader.ReadString();
             return new Uri( value );
         }
 
-        static void WriteUri( SonezakiWriter writer, Uri value )
+        static void WriteUri( PainlessBinaryWriter writer, Uri value )
         {
             writer.Write( value.ToString() );
         }

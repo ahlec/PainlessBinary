@@ -11,7 +11,7 @@ namespace PainlessBinary
 {
     internal delegate ITypeSignature TypeSignatureCreator( uint id, Type baseType );
 
-    internal delegate ISerializableValue ValueInstantiator( TypeManager typeManager, Type fullType, SonezakiReader reader );
+    internal delegate ISerializableValue ValueInstantiator( TypeManager typeManager, Type fullType, PainlessBinaryReader reader );
 
     internal delegate ISerializableValue ValueWrapper( TypeManager typeManager, Type fullType, object value );
 
