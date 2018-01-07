@@ -13,6 +13,7 @@ namespace PainlessBinary.IO
     {
         readonly StreamWrapper _streamWrapper;
         readonly TypeManager _typeManager;
+        readonly ReaderReferenceTable _referenceTable = new ReaderReferenceTable();
         readonly int _hashSeed;
         readonly int _hashMultiplicationConstant;
 
@@ -64,12 +65,21 @@ namespace PainlessBinary.IO
         {
             ISerializableValue itemSerializableValue = _typeManager.Instantiate( expectedType, this );
             itemSerializableValue.Read( this );
-            return itemSerializableValue.Value;
+            object value = itemSerializableValue.Value;
+
+            if ( _typeManager.DetermineIsTypeSerializedAsReference( expectedType ) )
+            {
+                uint referenceId = ReadUInt32();
+                _referenceTable.Add( referenceId, value );
+            }
+
+            return value;
         }
 
         object ReadReference()
         {
-            throw new NotImplementedException();
+            uint referenceId = ReadUInt32();
+            return _referenceTable.GetReference( referenceId );
         }
     }
 }

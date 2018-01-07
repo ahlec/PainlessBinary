@@ -3,14 +3,22 @@
 // This library is available to the public under the MIT license.
 // ------------------------------------------------------------------------------------------------------------------------
 
-using PainlessBinary.Markup;
+using System.Collections.Generic;
 
-namespace PainlessBinary.Tests.ExampleTypes
+namespace PainlessBinary.IO
 {
-    [BinaryDataType( BinarySerializationScheme.Reference )]
-    public sealed class Item
+    internal sealed class ReaderReferenceTable
     {
-        [BinaryMember( 1 )]
-        public string Name { get; set; }
+        readonly Dictionary<uint, object> _references = new Dictionary<uint, object>();
+
+        public object GetReference( uint referenceId )
+        {
+            return _references[referenceId];
+        }
+
+        public void Add( uint referenceId, object value )
+        {
+            _references.Add( referenceId, value );
+        }
     }
 }

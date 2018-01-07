@@ -13,6 +13,7 @@ namespace PainlessBinary.IO
     {
         readonly StreamWrapper _streamWrapper;
         readonly TypeManager _typeManager;
+        readonly WriterReferenceTable _referenceTable = new WriterReferenceTable();
         readonly int _hashSeed;
         readonly int _hashMultiplicationConstant;
 
@@ -50,7 +51,8 @@ namespace PainlessBinary.IO
 
         public void WritePainlessBinaryObject( Type typeForSerializing, object value )
         {
-            SerializationType serializationType = DetermineSerializationType( typeForSerializing, value );
+            bool doesSerializeAsReference = _typeManager.DetermineIsTypeSerializedAsReference( typeForSerializing );
+            SerializationType serializationType = DetermineSerializationType( value, doesSerializeAsReference );
             Write( (byte) serializationType );
 
             switch ( serializationType )
@@ -60,7 +62,7 @@ namespace PainlessBinary.IO
 
                 case SerializationType.RegularValue:
                     {
-                        WriteRegularValue( typeForSerializing, value );
+                        WriteRegularValue( typeForSerializing, value, doesSerializeAsReference );
                         break;
                     }
 
@@ -75,14 +77,14 @@ namespace PainlessBinary.IO
             }
         }
 
-        SerializationType DetermineSerializationType( Type type, object value )
+        SerializationType DetermineSerializationType( object value, bool doesSerializeAsReference )
         {
             if ( value == null )
             {
                 return SerializationType.Null;
             }
 
-            if ( _typeManager.DetermineIsTypeSerializedAsReference( type ) )
+            if ( doesSerializeAsReference && _referenceTable.IsAlreadyRegistered( value ) )
             {
                 return SerializationType.Reference;
             }
@@ -90,15 +92,22 @@ namespace PainlessBinary.IO
             return SerializationType.RegularValue;
         }
 
-        void WriteRegularValue( Type type, object value )
+        void WriteRegularValue( Type type, object value, bool doesTypeSerializeAsReference )
         {
             ISerializableValue itemSerializableValue = _typeManager.WrapRawValue( type, value );
             itemSerializableValue.Write( this );
+
+            if ( doesTypeSerializeAsReference )
+            {
+                uint referenceNumber = _referenceTable.Register( value );
+                Write( referenceNumber );
+            }
         }
 
         void WriteReference( object value )
         {
-            throw new NotImplementedException();
+            uint referenceId = _referenceTable.GetReferenceId( value );
+            Write( referenceId );
         }
     }
 }
