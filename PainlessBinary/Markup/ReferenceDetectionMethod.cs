@@ -3,15 +3,11 @@
 // This library is available to the public under the MIT license.
 // ------------------------------------------------------------------------------------------------------------------------
 
-using System;
-
 namespace PainlessBinary.Markup
 {
-    [AttributeUsage( AttributeTargets.Class )]
-    public sealed class BinaryDataTypeAttribute : Attribute
+    public enum ReferenceDetectionMethod
     {
-        public BinarySerializationScheme Scheme { get; set; }
-
-        public ReferenceDetectionMethod ReferenceDetectionMethod { get; set; }
+        ReferenceEquals,
+        Equals
     }
 }

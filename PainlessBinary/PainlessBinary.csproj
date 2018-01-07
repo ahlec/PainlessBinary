@@ -57,6 +57,7 @@
     <Compile Include="IO\PainlessBinaryWriter.cs" />
     <Compile Include="IO\StandardReadWriteOperations.cs" />
     <Compile Include="Markup\BinarySerializationScheme.cs" />
+    <Compile Include="Markup\ReferenceDetectionMethod.cs" />
     <Compile Include="MultiKeyDictionary.cs" />
     <Compile Include="Reflection\SerializedMember.cs" />
     <Compile Include="Reflection\SerializedField.cs" />

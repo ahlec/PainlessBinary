@@ -13,7 +13,7 @@ namespace PainlessBinary.IO
     {
         readonly StreamWrapper _streamWrapper;
         readonly TypeManager _typeManager;
-        readonly WriterReferenceTable _referenceTable = new WriterReferenceTable();
+        readonly WriterReferenceTable _referenceTable;
         readonly int _hashSeed;
         readonly int _hashMultiplicationConstant;
 
@@ -22,6 +22,7 @@ namespace PainlessBinary.IO
         {
             _streamWrapper = dataStream;
             _typeManager = typeManager;
+            _referenceTable = new WriterReferenceTable( typeManager );
             _hashSeed = hashSeed;
             _hashMultiplicationConstant = hashMultiplicationConstant;
         }

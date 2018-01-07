@@ -6,13 +6,20 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using PainlessBinary.Markup;
 
 namespace PainlessBinary.IO
 {
     internal sealed class WriterReferenceTable
     {
+        readonly TypeManager _typeManager;
         readonly Dictionary<Type, List<Reference>> _referencesByType = new Dictionary<Type, List<Reference>>();
         uint _nextReferenceId = 1;
+
+        public WriterReferenceTable( TypeManager typeManager )
+        {
+            _typeManager = typeManager;
+        }
 
         public bool IsAlreadyRegistered( object value )
         {
@@ -43,7 +50,8 @@ namespace PainlessBinary.IO
                 _referencesByType.Add( valueType, references );
             }
 
-            Reference newReference = new Reference( _nextReferenceId, value );
+            ReferenceDetectionMethod detectionMethod = _typeManager.GetTypeReferenceDetectionMethod( valueType );
+            Reference newReference = new Reference( detectionMethod, _nextReferenceId, value );
             _nextReferenceId++;
             references.Add( newReference );
             return newReference.Id;
@@ -51,10 +59,12 @@ namespace PainlessBinary.IO
 
         sealed class Reference
         {
+            readonly ReferenceDetectionMethod _detectionMethod;
             readonly object _value;
 
-            public Reference( uint id, object value )
+            public Reference( ReferenceDetectionMethod detectionMethod, uint id, object value )
             {
+                _detectionMethod = detectionMethod;
                 Id = id;
                 _value = value;
             }
@@ -63,7 +73,15 @@ namespace PainlessBinary.IO
 
             public bool Is( object other )
             {
-                return _value.Equals( other );
+                switch ( _detectionMethod )
+                {
+                    case ReferenceDetectionMethod.ReferenceEquals:
+                        return ReferenceEquals( _value, other );
+                    case ReferenceDetectionMethod.Equals:
+                        return _value.Equals( other );
+                    default:
+                        throw new NotImplementedException();
+                }
             }
         }
     }

@@ -4,7 +4,6 @@
 // ------------------------------------------------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
 using System.Reflection;
 using PainlessBinary.Exceptions;
 using PainlessBinary.IO;
@@ -15,7 +14,6 @@ namespace PainlessBinary
 {
     internal sealed class TypeManager
     {
-        static readonly IDictionary<Type, bool> _isTypeSerializedAsReference = new Dictionary<Type, bool>();
         readonly TypeRegistry _registry;
 
         public TypeManager( TypeRegistry registry )
@@ -41,23 +39,22 @@ namespace PainlessBinary
 
         public bool DetermineIsTypeSerializedAsReference( Type type )
         {
-            if ( _isTypeSerializedAsReference.TryGetValue( type, out bool isSerializedAsReference ) )
+            if ( !TryGetBinaryDataTypeAttribute( type, out BinaryDataTypeAttribute attribute ) )
             {
-                return isSerializedAsReference;
+                return false;
             }
 
-            BinaryDataTypeAttribute dataTypeAttribute = type.GetCustomAttribute<BinaryDataTypeAttribute>();
-            if ( dataTypeAttribute != null )
+            return ( attribute.Scheme == BinarySerializationScheme.Reference );
+        }
+
+        public ReferenceDetectionMethod GetTypeReferenceDetectionMethod( Type type )
+        {
+            if ( !TryGetBinaryDataTypeAttribute( type, out BinaryDataTypeAttribute attribute ) )
             {
-                isSerializedAsReference = ( dataTypeAttribute.Scheme == BinarySerializationScheme.Reference );
-            }
-            else
-            {
-                isSerializedAsReference = false;
+                throw new InvalidOperationException();
             }
 
-            _isTypeSerializedAsReference[type] = isSerializedAsReference;
-            return isSerializedAsReference;
+            return attribute.ReferenceDetectionMethod;
         }
 
         internal ISerializableValue Instantiate( Type type, PainlessBinaryReader reader )
@@ -72,6 +69,12 @@ namespace PainlessBinary
             RegisteredType registeredType = GetRegisteredType( type );
             ISerializableValue serializableValue = registeredType.Wrapper( this, type, value );
             return serializableValue;
+        }
+
+        static bool TryGetBinaryDataTypeAttribute( Type type, out BinaryDataTypeAttribute attribute )
+        {
+            attribute = type.GetCustomAttribute<BinaryDataTypeAttribute>();
+            return ( attribute != null );
         }
 
         RegisteredType GetRegisteredType( Type type )

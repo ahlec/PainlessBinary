@@ -8,7 +8,7 @@ using PainlessBinary.Markup;
 
 namespace PainlessBinary.Tests.ExampleTypes
 {
-    [BinaryDataType]
+    [BinaryDataType( Scheme = BinarySerializationScheme.Reference, ReferenceDetectionMethod = ReferenceDetectionMethod.ReferenceEquals )]
     public sealed class Character
     {
         [BinaryMember( 1 )]
