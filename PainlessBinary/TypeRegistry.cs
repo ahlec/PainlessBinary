@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using PainlessBinary.Exceptions;
 using PainlessBinary.IO;
 using PainlessBinary.Markup;
 using PainlessBinary.SerializableValues;
@@ -43,11 +44,11 @@ namespace PainlessBinary
             switch ( returnCode )
             {
                 case RegisterTypeReturnCode.DoesNotHaveBinaryDataType:
-                    throw new InvalidOperationException( $"The type {type} is not marked up with {nameof( BinaryDataTypeAttribute )}." );
+                    throw new TypeMissingMarkupException( type );
                 case RegisterTypeReturnCode.TypeAlreadyRegistered:
-                    throw new InvalidOperationException( $"The type {type} has already been registered." );
+                    throw new TypeAlreadyRegisteredException( type );
                 case RegisterTypeReturnCode.InvalidTypeToRegister:
-                    throw new InvalidOperationException( $"The type {type} is invalid to register." );
+                    throw new TypeCannotBeRegisteredException( type );
                 case RegisterTypeReturnCode.Success:
                     return;
                 default:

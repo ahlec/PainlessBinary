@@ -45,6 +45,9 @@
     <AdditionalFiles Include="../stylecop.json">
       <Link>stylecop.json</Link>
     </AdditionalFiles>
+    <Compile Include="Exceptions\TypeAlreadyRegisteredException.cs" />
+    <Compile Include="Exceptions\TypeCannotBeRegisteredException.cs" />
+    <Compile Include="Exceptions\TypeMissingMarkupException.cs" />
     <Compile Include="IO\ReaderReferenceTable.cs" />
     <Compile Include="IO\WriterReferenceTable.cs" />
     <Compile Include="Markup\BinaryDataTypeAttribute.cs" />
